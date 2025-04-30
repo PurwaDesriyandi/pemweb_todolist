@@ -47,6 +47,6 @@ class User extends Authenticatable
         ];
     }
     public function users(){
-        return $this->hasMany(task:class);
+        return $this->hasMany(task::class);
     }
 }
