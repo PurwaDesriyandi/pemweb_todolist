@@ -15,48 +15,48 @@
             --light: #f8f9fa;
             --dark: #212529;
         }
-        
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        
+
         body {
             background-color: #f5f7fb;
             color: var(--dark);
         }
-        
+
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 2rem;
         }
-        
+
         header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 2rem;
         }
-        
+
         h1 {
             color: var(--primary);
             font-size: 1.8rem;
         }
-        
+
         .date-display {
             font-size: 1rem;
             color: #6c757d;
         }
-        
+
         .dashboard {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
             gap: 1.5rem;
         }
-        
+
         .card {
             background: white;
             border-radius: 10px;
@@ -64,7 +64,7 @@
             padding: 1.5rem;
             height: fit-content;
         }
-        
+
         .card-header {
             display: flex;
             justify-content: space-between;
@@ -73,23 +73,23 @@
             padding-bottom: 0.5rem;
             border-bottom: 1px solid #e9ecef;
         }
-        
+
         .card-title {
             font-size: 1.2rem;
             font-weight: 600;
             color: var(--dark);
         }
-        
+
         .card-stats {
             font-size: 0.85rem;
             color: #6c757d;
         }
-        
+
         .task-input {
             display: flex;
             margin-bottom: 1rem;
         }
-        
+
         .task-input input {
             flex: 1;
             padding: 0.75rem;
@@ -97,7 +97,7 @@
             border-radius: 5px 0 0 5px;
             font-size: 0.9rem;
         }
-        
+
         .task-input button {
             padding: 0.75rem 1rem;
             background-color: var(--primary);
@@ -107,48 +107,48 @@
             cursor: pointer;
             transition: background-color 0.2s;
         }
-        
+
         .task-input button:hover {
             background-color: var(--secondary);
         }
-        
+
         .task-list {
             list-style-type: none;
         }
-        
+
         .task-item {
             display: flex;
             align-items: center;
             padding: 0.75rem 0;
             border-bottom: 1px solid #f2f2f2;
         }
-        
+
         .task-item:last-child {
             border-bottom: none;
         }
-        
+
         .task-checkbox {
             margin-right: 0.75rem;
             width: 18px;
             height: 18px;
             cursor: pointer;
         }
-        
+
         .task-text {
             flex: 1;
             font-size: 0.95rem;
         }
-        
+
         .completed .task-text {
             text-decoration: line-through;
             color: #6c757d;
         }
-        
+
         .task-actions {
             display: flex;
             gap: 0.5rem;
         }
-        
+
         .task-actions button {
             background: none;
             border: none;
@@ -158,48 +158,48 @@
             border-radius: 3px;
             transition: background-color 0.2s;
         }
-        
+
         .btn-edit {
             color: var(--warning);
         }
-        
+
         .btn-edit:hover {
             background-color: #fff3cd;
         }
-        
+
         .btn-delete {
             color: var(--danger);
         }
-        
+
         .btn-delete:hover {
             background-color: #f8d7da;
         }
-        
+
         .priority-indicator {
             width: 12px;
             height: 12px;
             border-radius: 50%;
             margin-right: 0.75rem;
         }
-        
+
         .priority-high {
             background-color: var(--danger);
         }
-        
+
         .priority-medium {
             background-color: var(--warning);
         }
-        
+
         .priority-low {
             background-color: var(--success);
         }
-        
+
         .filters {
             display: flex;
             gap: 0.75rem;
             margin-bottom: 1rem;
         }
-        
+
         .filter-btn {
             padding: 0.5rem 0.75rem;
             background-color: #e9ecef;
@@ -209,16 +209,16 @@
             cursor: pointer;
             transition: all 0.2s;
         }
-        
+
         .filter-btn.active {
             background-color: var(--primary);
             color: white;
         }
-        
+
         .progress-section {
             margin-top: 1rem;
         }
-        
+
         .progress-bar {
             height: 8px;
             background-color: #e9ecef;
@@ -226,25 +226,25 @@
             margin-top: 0.5rem;
             overflow: hidden;
         }
-        
+
         .progress-fill {
             height: 100%;
             background-color: var(--primary);
             width: 65%;
         }
-        
+
         /* Summary Card */
         .summary-card {
             margin-bottom: 1.5rem;
         }
-        
+
         .summary-stats {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
             gap: 1rem;
             margin-top: 1rem;
         }
-        
+
         .stat-box {
             background-color: white;
             padding: 1rem;
@@ -252,33 +252,33 @@
             text-align: center;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
         }
-        
+
         .stat-number {
             font-size: 1.8rem;
             font-weight: 700;
             color: var(--primary);
             margin-bottom: 0.5rem;
         }
-        
+
         .stat-label {
             font-size: 0.85rem;
             color: #6c757d;
         }
-        
+
         /* Calendar View */
         .calendar {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
             gap: 0.5rem;
         }
-        
+
         .calendar-header {
             font-weight: 600;
             text-align: center;
             padding: 0.5rem;
             color: #6c757d;
         }
-        
+
         .calendar-day {
             aspect-ratio: 1;
             padding: 0.25rem;
@@ -289,17 +289,17 @@
             font-size: 0.85rem;
             background-color: white;
         }
-        
+
         .day-number {
             font-weight: 600;
             margin-bottom: 0.25rem;
         }
-        
+
         .has-tasks {
             background-color: #e6f0ff;
             position: relative;
         }
-        
+
         .has-tasks::after {
             content: '';
             width: 6px;
@@ -309,16 +309,16 @@
             position: absolute;
             bottom: 5px;
         }
-        
+
         .today {
             border: 2px solid var(--primary);
         }
-        
+
         @media (max-width: 768px) {
             .container {
                 padding: 1rem;
             }
-            
+
             .dashboard {
                 grid-template-columns: 1fr;
             }
@@ -333,7 +333,7 @@
             <h1>Task Dashboard</h1>
             <div class="date-display" id="currentDate">Wednesday, April 30, 2025</div>
         </header>
-        
+
         <div class="summary-card card">
             <div class="card-header">
                 <div class="card-title">Summary</div>
@@ -357,25 +357,25 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="dashboard">
             <div class="card">
                 <div class="card-header">
                     <div class="card-title">Today's Tasks</div>
                     <div class="card-stats">3 tasks remaining</div>
                 </div>
-                
+
                 <div class="filters">
                     <button class="filter-btn active">All</button>
                     <button class="filter-btn">Active</button>
                     <button class="filter-btn">Completed</button>
                 </div>
-                
+
                 <div class="task-input">
                     <input type="text" placeholder="Add a new task...">
                     <button>Add</button>
                 </div>
-                
+
                 <ul class="task-list">
                     <li class="task-item">
                         <div class="priority-indicator priority-high"></div>
@@ -405,7 +405,7 @@
                         </div>
                     </li>
                 </ul>
-                
+
                 <div class="progress-section">
                     <div style="display: flex; justify-content: space-between; margin-bottom: 0.25rem;">
                         <span style="font-size: 0.85rem;">Daily Progress</span>
@@ -416,13 +416,13 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="card">
                 <div class="card-header">
                     <div class="card-title">Upcoming Tasks</div>
                     <div class="card-stats">8 tasks</div>
                 </div>
-                
+
                 <ul class="task-list">
                     <li class="task-item">
                         <div class="priority-indicator priority-high"></div>
@@ -450,13 +450,13 @@
                     </li>
                 </ul>
             </div>
-            
+
             <div class="card">
                 <div class="card-header">
                     <div class="card-title">Calendar View</div>
                     <div class="card-stats">May 2025</div>
                 </div>
-                
+
                 <div class="calendar">
                     <div class="calendar-header">Sun</div>
                     <div class="calendar-header">Mon</div>
@@ -465,7 +465,7 @@
                     <div class="calendar-header">Thu</div>
                     <div class="calendar-header">Fri</div>
                     <div class="calendar-header">Sat</div>
-                    
+
                     <div class="calendar-day"></div>
                     <div class="calendar-day"></div>
                     <div class="calendar-day"></div>
@@ -481,7 +481,7 @@
                     <div class="calendar-day">
                         <div class="day-number">3</div>
                     </div>
-                    
+
                     <div class="calendar-day">
                         <div class="day-number">4</div>
                     </div>
@@ -507,13 +507,13 @@
             </div>
         </div>
     </div>
-    
+
     <script>
         // Basic task interaction functionality
         document.addEventListener('DOMContentLoaded', function() {
             // Get all checkboxes
             const checkboxes = document.querySelectorAll('.task-checkbox');
-            
+
             // Add event listener to each checkbox
             checkboxes.forEach(checkbox => {
                 checkbox.addEventListener('change', function() {
@@ -523,41 +523,41 @@
                     } else {
                         taskItem.classList.remove('completed');
                     }
-                    
+
                     // Update task counters (simplified)
                     updateTaskCounts();
                 });
             });
-            
+
             // Add task functionality
             const addTaskInput = document.querySelector('.task-input input');
             const addTaskButton = document.querySelector('.task-input button');
-            
+
             addTaskButton.addEventListener('click', function() {
                 addNewTask();
             });
-            
+
             addTaskInput.addEventListener('keypress', function(e) {
                 if (e.key === 'Enter') {
                     addNewTask();
                 }
             });
-            
+
             // Filter buttons
             const filterButtons = document.querySelectorAll('.filter-btn');
-            
+
             filterButtons.forEach(button => {
                 button.addEventListener('click', function() {
                     // Remove active class from all buttons
                     filterButtons.forEach(btn => btn.classList.remove('active'));
-                    
+
                     // Add active class to clicked button
                     this.classList.add('active');
-                    
+
                     // Apply filter
                     const filter = this.textContent.toLowerCase();
                     const taskItems = document.querySelectorAll('.task-list .task-item');
-                    
+
                     taskItems.forEach(item => {
                         if (filter === 'all') {
                             item.style.display = '';
@@ -569,7 +569,7 @@
                     });
                 });
             });
-            
+
             // Delete task buttons
             document.addEventListener('click', function(e) {
                 if (e.target.classList.contains('btn-delete')) {
@@ -578,26 +578,26 @@
                     updateTaskCounts();
                 }
             });
-            
+
             // Set current date
-            document.getElementById('currentDate').textContent = new Date().toLocaleDateString('en-US', { 
-                weekday: 'long', 
-                year: 'numeric', 
-                month: 'long', 
-                day: 'numeric' 
+            document.getElementById('currentDate').textContent = new Date().toLocaleDateString('en-US', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
             });
         });
-        
+
         function addNewTask() {
             const input = document.querySelector('.task-input input');
             const taskText = input.value.trim();
-            
+
             if (taskText) {
                 const taskList = document.querySelector('.task-list');
-                
+
                 const newTask = document.createElement('li');
                 newTask.className = 'task-item';
-                
+
                 newTask.innerHTML = `
                     <div class="priority-indicator priority-medium"></div>
                     <input type="checkbox" class="task-checkbox">
@@ -607,31 +607,31 @@
                         <button class="btn-delete">Delete</button>
                     </div>
                 `;
-                
+
                 taskList.prepend(newTask);
                 input.value = '';
                 updateTaskCounts();
             }
         }
-        
+
         function updateTaskCounts() {
             // This is a simplified version - in a real app you'd have more robust logic
             const totalTasks = document.querySelectorAll('.task-item').length;
             const completedTasks = document.querySelectorAll('.task-item.completed').length;
             const remainingTasks = totalTasks - completedTasks;
-            
+
             const taskStats = document.querySelector('.card-stats');
             if (taskStats) {
                 taskStats.textContent = `${remainingTasks} tasks remaining`;
             }
-            
+
             // Update progress bar
             const progressPercentage = totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0;
             const progressFill = document.querySelector('.progress-fill');
             if (progressFill) {
                 progressFill.style.width = `${progressPercentage}%`;
             }
-            
+
             const progressText = document.querySelector('.progress-section span:last-child');
             if (progressText) {
                 progressText.textContent = `${Math.round(progressPercentage)}%`;
