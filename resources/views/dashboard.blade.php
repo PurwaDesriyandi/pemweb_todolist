@@ -325,6 +325,8 @@
         }
     </style>
 </head>
+
+<x-header title="Selamat Datang" />
 <body>
     <div class="container">
         <header>
