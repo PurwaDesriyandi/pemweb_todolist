@@ -12,15 +12,6 @@
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
   <style>
-    .input-group .form-control:focus {
-  box-shadow: none;
-  border-color: #0400ff;
-}
-
-.btn-outline-secondary:hover {
-  background-color: #f0f0f0;
-}
-
     .navbar-brand img {
       max-height: 65px;
     }
@@ -53,31 +44,21 @@
 </head>
 <body>
 
-<nav class="navbar navbar-custom shadow-sm sticky-top">
-  <div class="container d-flex align-items-center justify-content-between">
-    <!-- Search bar -->
-    <div class="flex-grow-1 me-3">
-      <div class="input-group">
-        <span class="input-group-text bg-white border-end-0">
-          <i class="bi bi-search text-muted"></i>
-        </span>
-        <input type="text" class="form-control border-start-0" placeholder="Search...">
-      </div>
-    </div>
-
-    <!-- Star button and count -->
-    <div class="d-flex align-items-center me-3">
-      <button class="btn btn-outline-secondary me-2">
-        <i class="bi bi-star"></i> Star
-      </button>
-      <span class="fw-bold">1,105</span>
-    </div>
-
-    <!-- Profile avatar -->
-    <div class="position-relative">
-      <img src="https://via.placeholder.com/40" class="rounded-circle" alt="Avatar" style="width: 40px; height: 40px;">
-      <span class="position-absolute bottom-0 end-0 translate-middle p-1 bg-success border border-light rounded-circle"></span>
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-custom shadow-sm sticky-top">
+  <div class="container">
+    <a class="navbar-brand" href="#">
+      <img src="{{ asset('assets/img/favicon.png') }}" alt="logo">
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        <a class="nav-link fw-bold {{ request()->is('/') ? 'active' : '' }}" href="/">DASHBOARD</a>
+        <a class="nav-link fw-bold {{ request()->is('tugas') ? 'active' : '' }}" href="/tugas">TUGAS</a>
+        <a class="nav-link fw-bold {{ request()->is('admin/login') ? 'active' : '' }}" href="/login">LOGIN</a>
+      </ul>
     </div>
   </div>
 </nav>
-
