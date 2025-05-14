@@ -12,3 +12,6 @@ Route::get('/login', function () {
 Route::get('/register', function () {
     return view('auth/register');
 });
+Route::get('/logout', function () {
+    return view('auth/logout');
+});

@@ -57,7 +57,7 @@
       <ul class="navbar-nav ms-auto">
         <a class="nav-link fw-bold {{ request()->is('/') ? 'active' : '' }}" href="/">DASHBOARD</a>
         <a class="nav-link fw-bold {{ request()->is('tugas') ? 'active' : '' }}" href="/tugas">TUGAS</a>
-        <a class="nav-link fw-bold {{ request()->is('admin/login') ? 'active' : '' }}" href="/login">LOGIN</a>
+        <a class="nav-link fw-bold {{ request()->is('auth/login') ? 'active' : '' }}" href="/login">LOGOUT</a>
       </ul>
     </div>
   </div>
