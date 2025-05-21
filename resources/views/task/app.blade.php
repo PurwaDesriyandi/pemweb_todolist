@@ -517,283 +517,199 @@
             }
         }
     </style>
-</head>
+<!-- Main Content -->
+<main class="page-content" id="content">
+    <div class="container">
+        <header>
+            <h1>Daskboard</h1>
+            <div class="date-display" id="currentDate">Wednesday, May 21, 2025</div>
+        </header> 
 
-<body>
-    <!-- Navbar -->
-    <nav class="navbar">
-        <div class="navbar-left">
-            <a href="/" class="navbar-brand">ToDoList </a>
-            <div class="hamburger" id="toggleSidebar">
-                <span></span>
-                <span></span>
-                <span></span>
+        <div class="summary-card card">
+            <div class="card-header">
+                <div class="card-title">Summary</div>
             </div>
-
+            <div class="summary-stats">
+                <div class="stat-box">
+                    <div class="stat-number">12</div>
+                    <div class="stat-label">Total Tasks</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">5</div>
+                    <div class="stat-label">Completed</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">3</div>
+                    <div class="stat-label">Due Today</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">4</div>
+                    <div class="stat-label">Overdue</div>
+                </div>
+            </div>
         </div>
 
-        <div class="navbar-links">
-            <div class="flex-grow-1 me-3">
-                <div class="input-group">
-                    <span class="input-group-text bg-white border-end-0">
-                        <i class="bi bi-search text-muted"></i>
-                    </span>
-                    <input type="text" class="form-control border-start-0" placeholder="Search...">
-                </div>
-            </div>
-            <div class="dropdown">
-                <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle navbar-link" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                    <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Profile" width="32" height="32" class="rounded-circle me-2">
-                </a>
-                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
-                    <li><a class="dropdown-item" href="#">Edit Profile</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                // Activate sidebar by default when page loads
+                document.getElementById('sidebar').classList.add('active');
+                document.getElementById('content').classList.add('sidebar-active');
+                document.getElementById('toggleSidebar').classList.add('active');
 
-    <!-- Sidebar -->
-    <div class="sidebar" id="sidebar">
+                // Hamburger menu toggle
+                const toggleSidebar = document.getElementById('toggleSidebar');
+                const sidebar = document.getElementById('sidebar');
+                const content = document.getElementById('content');
 
-        <ul class="nav">
-            <li class="nav-item">
-                <a class="nav-link active" href="/">
-                    <i class="bi bi-house-door-fill"></i>
-                    <span>Dashboard</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/taskassignment">
-                    <i class="bi bi-list-task"></i>
-                    <span>Tasks Assignment</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/calendar">
-                    <i class="bi bi-calendar-check"> </i>
-                    <span>Calendar</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/upcomingtask">
-                    <i class="bi bi-bar-chart-line"></i>
-                    <span>Upcoming Tasks</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/login">
-                    <i class="bi bi-box-arrow-right"></i>
-                    <span>Logout</span>
-                </a>
-            </li>
-        </ul>
-    </div>
-
-    {{-- <!-- Main Content -->
-    <main class="page-content" id="content">
-        <div class="container">
-            <header>
-                <h1>Daskboard</h1>
-                <div class="date-display" id="currentDate">Wednesday, May 21, 2025</div>
-            </header> --}}
-
-    @extends('task.app')
-
-            {{-- <div class="summary-card card">
-                <div class="card-header">
-                    <div class="card-title">Summary</div>
-                </div>
-                <div class="summary-stats">
-                    <div class="stat-box">
-                        <div class="stat-number">12</div>
-                        <div class="stat-label">Total Tasks</div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="stat-number">5</div>
-                        <div class="stat-label">Completed</div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="stat-number">3</div>
-                        <div class="stat-label">Due Today</div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="stat-number">4</div>
-                        <div class="stat-label">Overdue</div>
-                    </div>
-                </div>
-            </div> --}}
-
-
-     {{-- @extends ('task.upcomingtask') --}}
-
-
-
-
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Activate sidebar by default when page loads
-            document.getElementById('sidebar').classList.add('active');
-            document.getElementById('content').classList.add('sidebar-active');
-            document.getElementById('toggleSidebar').classList.add('active');
-
-            // Hamburger menu toggle
-            const toggleSidebar = document.getElementById('toggleSidebar');
-            const sidebar = document.getElementById('sidebar');
-            const content = document.getElementById('content');
-
-            toggleSidebar.addEventListener('click', function() {
-                toggleSidebar.classList.toggle('active');
-                sidebar.classList.toggle('active');
-                content.classList.toggle('sidebar-active');
-            });
-
-            // Close sidebar if clicking outside
-            document.addEventListener('click', function(e) {
-                // Only if sidebar is active and the click is not on or within the sidebar or hamburger
-                if (sidebar.classList.contains('active') &&
-                    !sidebar.contains(e.target) &&
-                    !toggleSidebar.contains(e.target)) {
-                    toggleSidebar.classList.remove('active');
-                    sidebar.classList.remove('active');
-                    content.classList.remove('sidebar-active');
-                }
-            });
-
-            // Get all checkboxes
-            const checkboxes = document.querySelectorAll('.task-checkbox');
-
-            // Add event listener to each checkbox
-            checkboxes.forEach(checkbox => {
-                checkbox.addEventListener('change', function() {
-                    const taskItem = this.closest('.task-item');
-                    if (this.checked) {
-                        taskItem.classList.add('completed');
-                    } else {
-                        taskItem.classList.remove('completed');
-                    }
-
-                    // Update task counters
-                    updateTaskCounts();
+                toggleSidebar.addEventListener('click', function() {
+                    toggleSidebar.classList.toggle('active');
+                    sidebar.classList.toggle('active');
+                    content.classList.toggle('sidebar-active');
                 });
-            });
 
-            // Add task functionality
-            const addTaskInput = document.querySelector('.task-input input');
-            const addTaskButton = document.querySelector('.task-input button');
+                // Close sidebar if clicking outside
+                document.addEventListener('click', function(e) {
+                    // Only if sidebar is active and the click is not on or within the sidebar or hamburger
+                    if (sidebar.classList.contains('active') &&
+                        !sidebar.contains(e.target) &&
+                        !toggleSidebar.contains(e.target)) {
+                        toggleSidebar.classList.remove('active');
+                        sidebar.classList.remove('active');
+                        content.classList.remove('sidebar-active');
+                    }
+                });
 
-            addTaskButton.addEventListener('click', function() {
-                addNewTask();
-            });
+                // Get all checkboxes
+                const checkboxes = document.querySelectorAll('.task-checkbox');
 
-            addTaskInput.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    addNewTask();
-                }
-            });
-
-            // Filter buttons
-            const filterButtons = document.querySelectorAll('.filter-btn');
-
-            filterButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    // Remove active class from all buttons
-                    filterButtons.forEach(btn => btn.classList.remove('active'));
-
-                    // Add active class to clicked button
-                    this.classList.add('active');
-
-                    // Apply filter
-                    const filter = this.textContent.toLowerCase();
-                    const taskItems = document.querySelectorAll('.task-list .task-item');
-
-                    taskItems.forEach(item => {
-                        if (filter === 'all') {
-                            item.style.display = '';
-                        } else if (filter === 'active') {
-                            item.style.display = item.classList.contains('completed') ? 'none' : '';
-                        } else if (filter === 'completed') {
-                            item.style.display = item.classList.contains('completed') ? '' : 'none';
+                // Add event listener to each checkbox
+                checkboxes.forEach(checkbox => {
+                    checkbox.addEventListener('change', function() {
+                        const taskItem = this.closest('.task-item');
+                        if (this.checked) {
+                            taskItem.classList.add('completed');
+                        } else {
+                            taskItem.classList.remove('completed');
                         }
+
+                        // Update task counters
+                        updateTaskCounts();
                     });
                 });
+
+                // Add task functionality
+                const addTaskInput = document.querySelector('.task-input input');
+                const addTaskButton = document.querySelector('.task-input button');
+
+                addTaskButton.addEventListener('click', function() {
+                    addNewTask();
+                });
+
+                addTaskInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        addNewTask();
+                    }
+                });
+
+                // Filter buttons
+                const filterButtons = document.querySelectorAll('.filter-btn');
+
+                filterButtons.forEach(button => {
+                    button.addEventListener('click', function() {
+                        // Remove active class from all buttons
+                        filterButtons.forEach(btn => btn.classList.remove('active'));
+
+                        // Add active class to clicked button
+                        this.classList.add('active');
+
+                        // Apply filter
+                        const filter = this.textContent.toLowerCase();
+                        const taskItems = document.querySelectorAll('.task-list .task-item');
+
+                        taskItems.forEach(item => {
+                            if (filter === 'all') {
+                                item.style.display = '';
+                            } else if (filter === 'active') {
+                                item.style.display = item.classList.contains('completed') ? 'none' : '';
+                            } else if (filter === 'completed') {
+                                item.style.display = item.classList.contains('completed') ? '' : 'none';
+                            }
+                        });
+                    });
+                });
+
+                // Delete task buttons
+                document.addEventListener('click', function(e) {
+                    if (e.target.classList.contains('btn-delete')) {
+                        const taskItem = e.target.closest('.task-item');
+                        taskItem.remove();
+                        updateTaskCounts();
+                    }
+                });
+
+                // Set current date
+                document.getElementById('currentDate').textContent = new Date().toLocaleDateString('en-US', {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
             });
 
-            // Delete task buttons
-            document.addEventListener('click', function(e) {
-                if (e.target.classList.contains('btn-delete')) {
-                    const taskItem = e.target.closest('.task-item');
-                    taskItem.remove();
+            function addNewTask() {
+                const input = document.querySelector('.task-input input');
+                const taskText = input.value.trim();
+
+                if (taskText) {
+                    const taskList = document.querySelector('.task-list');
+
+                    const newTask = document.createElement('li');
+                    newTask.className = 'task-item';
+
+                    newTask.innerHTML = `
+                    <div class="priority-indicator priority-medium"></div>
+                    <input type="checkbox" class="task-checkbox">
+                    <span class="task-text">${taskText}</span>
+                    <div class="task-actions">
+                        <button class="btn-edit">Edit</button>
+                        <button class="btn-delete">Delete</button>
+                    </div>
+                `;
+
+                    taskList.prepend(newTask);
+                    input.value = '';
                     updateTaskCounts();
                 }
+            }
+
+            function updateTaskCounts() {
+                // This is a simplified version - in a real app you'd have more robust logic
+                const totalTasks = document.querySelectorAll('.task-item').length;
+                const completedTasks = document.querySelectorAll('.task-item.completed').length;
+                const remainingTasks = totalTasks - completedTasks;
+
+                const taskStats = document.querySelector('.card-stats');
+                if (taskStats) {
+                    taskStats.textContent = `${remainingTasks} tasks remaining`;
+                }
+
+                // Update progress bar
+                const progressPercentage = totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0;
+                const progressFill = document.querySelector('.progress-fill');
+                if (progressFill) {
+                    progressFill.style.width = `${progressPercentage}%`;
+                }
+
+                const progressText = document.querySelector('.progress-section span:last-child');
+                if (progressText) {
+                    progressText.textContent = `${Math.round(progressPercentage)}%`;
+                }
+            }
+
+
+
+            // Handle window resize
+            window.addEventListener('resize', function() {
+                // No special handling needed since sidebar works the same at all screen sizes
             });
-
-            // Set current date
-            document.getElementById('currentDate').textContent = new Date().toLocaleDateString('en-US', {
-                weekday: 'long',
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
-            });
-        });
-
-        function addNewTask() {
-            const input = document.querySelector('.task-input input');
-            const taskText = input.value.trim();
-
-            if (taskText) {
-                const taskList = document.querySelector('.task-list');
-
-                const newTask = document.createElement('li');
-                newTask.className = 'task-item';
-
-                newTask.innerHTML = `
-                <div class="priority-indicator priority-medium"></div>
-                <input type="checkbox" class="task-checkbox">
-                <span class="task-text">${taskText}</span>
-                <div class="task-actions">
-                    <button class="btn-edit">Edit</button>
-                    <button class="btn-delete">Delete</button>
-                </div>
-            `;
-
-                taskList.prepend(newTask);
-                input.value = '';
-                updateTaskCounts();
-            }
-        }
-
-        function updateTaskCounts() {
-            // This is a simplified version - in a real app you'd have more robust logic
-            const totalTasks = document.querySelectorAll('.task-item').length;
-            const completedTasks = document.querySelectorAll('.task-item.completed').length;
-            const remainingTasks = totalTasks - completedTasks;
-
-            const taskStats = document.querySelector('.card-stats');
-            if (taskStats) {
-                taskStats.textContent = `${remainingTasks} tasks remaining`;
-            }
-
-            // Update progress bar
-            const progressPercentage = totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0;
-            const progressFill = document.querySelector('.progress-fill');
-            if (progressFill) {
-                progressFill.style.width = `${progressPercentage}%`;
-            }
-
-            const progressText = document.querySelector('.progress-section span:last-child');
-            if (progressText) {
-                progressText.textContent = `${Math.round(progressPercentage)}%`;
-            }
-        }
-
-
-
-        // Handle window resize
-        window.addEventListener('resize', function() {
-            // No special handling needed since sidebar works the same at all screen sizes
-        });
-    </script>
-</body>
-
-</html>
+        </script>

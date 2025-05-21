@@ -15,3 +15,12 @@ Route::get('/register', function () {
 Route::get('/logout', function () {
     return view('auth/logout');
 });
+Route::get('/taskassignment', function (){
+    return view('task/taskassignment');
+});
+Route::get('/calendar', function (){
+    return view('task/calendar');
+});
+Route::get('/upcomingtask', function (){
+    return view('task/upcomingtask');
+});
