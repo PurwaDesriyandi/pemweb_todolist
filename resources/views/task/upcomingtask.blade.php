@@ -557,7 +557,7 @@
 
         <ul class="nav">
             <li class="nav-item">
-                <a class="nav-link active" href="/">
+                <a class="nav-link " href="/">
                     <i class="bi bi-house-door-fill"></i>
                     <span>Dashboard</span>
                 </a>
@@ -575,7 +575,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/upcomingtask">
+                <a class="nav-link active" href="/upcomingtask">
                     <i class="bi bi-bar-chart-line"></i>
                     <span>Upcoming Tasks</span>
                 </a>
