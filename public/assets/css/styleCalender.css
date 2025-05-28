@@ -24,7 +24,7 @@ body {
 /* Navbar */
 .navbar {
     background-color: white;
-    padding: 1rem 2rem;
+    padding: 2rem 2rem;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
     position: fixed;
     top: 0;
@@ -33,6 +33,7 @@ body {
     z-index: 1000;
     display: flex;
     justify-content: space-between;
+    /* Tetap space-between */
     align-items: center;
 }
 
@@ -100,10 +101,12 @@ body {
     height: 100vh;
     position: fixed;
     top: 60px;
+    /* Make room for navbar */
     left: 0;
     z-index: 100;
     transition: transform 0.3s ease;
     transform: translateX(-100%);
+    /* Sidebar hidden by default on all screen sizes */
 }
 
 .sidebar.active {
@@ -150,11 +153,11 @@ body {
 /* Main Content */
 .page-content {
     margin-left: 0;
+    /* No sidebar margin by default */
     width: 100%;
     margin-top: 60px;
+    /* Make room for navbar */
     transition: margin-left 0.3s ease, width 0.3s ease;
-    position: relative;
-    z-index: 1;
 }
 
 .page-content.sidebar-active {
@@ -459,16 +462,6 @@ h1 {
 
 .today {
     border: 2px solid var(--primary);
-}
-
-.page-content {
-    margin-top: 60px !important; /* Pastikan margin-top selalu diterapkan */
-    padding: 20px; /* Tambahkan padding untuk jarak */
-    min-height: calc(100vh - 60px); /* Pastikan tinggi cukup */
-}
-
-.calendar {
-    margin-top: 20px; /* Jarak tambahan */
 }
 
 /* Responsive adjustments */
