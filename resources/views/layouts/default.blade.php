@@ -6,7 +6,12 @@
     <title>@yield("title", "to do app")</title>
     <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/css/styleCalender.css') }}" rel="stylesheet">
-    @yield("style")
+     <!-- Bootstrap CSS -->
+     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+     <!-- Bootstrap Icons -->
+     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+     <!-- Bootstrap JS (untuk dropdown) -->
+     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   </head>
   <body>
     <!-- Navbar -->
@@ -38,5 +43,6 @@
             </div>
         </div>
     </nav>
+    @yield('content')
   </body>
 </html>
