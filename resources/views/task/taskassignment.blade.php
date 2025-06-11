@@ -557,13 +557,13 @@
 
         <ul class="nav">
             <li class="nav-item">
-                <a class="nav-link active" href="/">
+                <a class="nav-link " href="/">
                     <i class="bi bi-house-door-fill"></i>
                     <span>Dashboard</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/taskassignment">
+                <a class="nav-link active" href="/taskassignment">
                     <i class="bi bi-list-task"></i>
                     <span>Tasks Assignment</span>
                 </a>
