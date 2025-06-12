@@ -516,6 +516,44 @@
                 grid-template-columns: repeat(2, 1fr);
             }
         }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            padding-top: 80px;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background-color: #fff;
+            margin: auto;
+            padding: 20px;
+            width: 90%;
+            max-width: 400px;
+            border-radius: 10px;
+            position: relative;
+        }
+
+        .close-btn {
+            position: absolute;
+            right: 15px;
+            top: 10px;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .modal input,
+        .modal textarea {
+            width: 100%;
+            margin: 8px 0;
+            padding: 8px;
+            font-size: 1rem;
+        }
     </style>
 </head>
 
@@ -542,8 +580,10 @@
                 </div>
             </div>
             <div class="dropdown">
-                <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle navbar-link" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                    <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Profile" width="32" height="32" class="rounded-circle me-2">
+                <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle navbar-link"
+                    id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Profile" width="32"
+                        height="32" class="rounded-circle me-2">
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
                     <li><a class="dropdown-item" href="#">Edit Profile</a></li>
@@ -606,8 +646,45 @@
 
                 <div class="task-input">
                     <input type="text" placeholder="Add a new task...">
-                    <button>Add</button>
+                    <button id="openAddModal">Add Task</button>
                 </div>
+
+                <!-- Add Task Modal -->
+                <div id="addTaskModal" class="modal">
+                    <div class="modal-content">
+                        <span class="close-btn" id="closeAddModal">&times;</span>
+                        <h3>Add New Task</h3>
+                        <input type="text" id="taskTitle" placeholder="Task title">
+                        <input type="date" id="taskDate">
+                        <textarea id="taskDescription" placeholder="Task description"></textarea>
+                        <button id="submitAddTask">Add Task</button>
+                    </div>
+                </div>
+
+                <!-- Modal Edit Tugas -->
+                <div class="modal" id="editTaskModal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h2>Edit Task</h2>
+                            <span class="close-btn" id="closeEditModal">&times;</span>
+                        </div>
+
+                        <label for="editTaskTitle">Judul Tugas *</label>
+                        <input type="text" id="editTaskTitle" required>
+
+                        <label for="editTaskDate">Tanggal</label>
+                        <input type="date" id="editTaskDate">
+
+                        <label for="editTaskDescription">Deskripsi</label>
+                        <textarea id="editTaskDescription" placeholder="Masukkan deskripsi tugas (opsional)…"></textarea>
+
+                        <div class="modal-footer">
+                            <button class="btn-cancel" id="cancelEditModal">Batal</button>
+                            <button class="btn-submit" id="saveEditTask">Simpan Perubahan</button>
+                        </div>
+                    </div>
+                </div>
+
 
                 <ul class="task-list">
                     <li class="task-item">
@@ -651,6 +728,135 @@
             </div>
 
             <script>
+                // Edit Task Functionality
+                let currentEditTask = null;
+
+                document.addEventListener('click', function(e) {
+                    if (e.target.classList.contains('btn-edit')) {
+                        const taskItem = e.target.closest('.task-item');
+                        currentEditTask = taskItem;
+
+                        // Get data
+                        const title = taskItem.querySelector('.task-text').textContent;
+                        const description = taskItem.querySelector('textarea')?.textContent || taskItem.querySelector(
+                            'div[style*="font-size: 0.9rem"]')?.textContent || '';
+                        const date = taskItem.querySelector('div[style*="font-size: 0.8rem"]')?.textContent || '';
+
+                        // Set to modal input
+                        document.getElementById('editTaskTitle').value = title.trim();
+                        document.getElementById('editTaskDate').value = date.trim();
+                        document.getElementById('editTaskDescription').value = description.trim();
+
+                        // Show modal
+                        document.getElementById('editTaskModal').style.display = 'block';
+                    }
+                });
+
+                // Close edit modal
+                document.getElementById('closeEditModal').addEventListener('click', () => {
+                    document.getElementById('editTaskModal').style.display = 'none';
+                });
+                document.getElementById('cancelEditModal').addEventListener('click', () => {
+                    document.getElementById('editTaskModal').style.display = 'none';
+                });
+
+                // Save changes
+                document.getElementById('saveEditTask').addEventListener('click', () => {
+                    if (!currentEditTask) return;
+
+                    const title = document.getElementById('editTaskTitle').value.trim();
+                    const date = document.getElementById('editTaskDate').value;
+                    const description = document.getElementById('editTaskDescription').value.trim();
+
+                    if (title) {
+                        currentEditTask.querySelector('.task-text').textContent = title;
+
+                        // Update or create date element
+                        let dateElement = currentEditTask.querySelector('div[style*="font-size: 0.8rem"]');
+                        if (!dateElement) {
+                            dateElement = document.createElement('div');
+                            dateElement.style.fontSize = '0.8rem';
+                            dateElement.style.color = 'gray';
+                            currentEditTask.insertBefore(dateElement, currentEditTask.querySelector('.task-actions'));
+                        }
+                        dateElement.textContent = date;
+
+                        // Update or create description element
+                        let descElement = currentEditTask.querySelector('div[style*="font-size: 0.9rem"]');
+                        if (!descElement) {
+                            descElement = document.createElement('div');
+                            descElement.style.fontSize = '0.9rem';
+                            currentEditTask.insertBefore(descElement, currentEditTask.querySelector('.task-actions'));
+                        }
+                        descElement.textContent = description;
+                    }
+
+                    document.getElementById('editTaskModal').style.display = 'none';
+                    updateTaskCounts();
+                });
+
+
+                // Modal Elements
+                const openModalBtn = document.getElementById('openAddModal');
+                const closeModalBtn = document.getElementById('closeAddModal');
+                const modal = document.getElementById('addTaskModal');
+                const submitAddTask = document.getElementById('submitAddTask');
+
+                // Open Modal
+                openModalBtn.addEventListener('click', () => {
+                    modal.style.display = 'block';
+                });
+
+                // Close Modal
+                closeModalBtn.addEventListener('click', () => {
+                    modal.style.display = 'none';
+                });
+
+                // Click outside modal closes it
+                window.addEventListener('click', (e) => {
+                    if (e.target === modal) {
+                        modal.style.display = 'none';
+                    }
+                });
+
+                // Add task from modal
+                submitAddTask.addEventListener('click', () => {
+                    addNewTaskFromModal();
+                    modal.style.display = 'none';
+                });
+
+                function addNewTaskFromModal() {
+                    const title = document.getElementById('taskTitle').value.trim();
+                    const date = document.getElementById('taskDate').value;
+                    const description = document.getElementById('taskDescription').value.trim();
+
+                    if (title) {
+                        const taskList = document.querySelector('.task-list');
+                        const newTask = document.createElement('li');
+                        newTask.className = 'task-item';
+
+                        newTask.innerHTML = `
+            <div class="priority-indicator priority-medium"></div>
+            <input type="checkbox" class="task-checkbox">
+            <span class="task-text">${title}</span>
+            <div style="font-size: 0.8rem; color: gray;">${date}</div>
+            <div style="font-size: 0.9rem;">${description}</div>
+            <div class="task-actions">
+                <button class="btn-edit">Edit</button>
+                <button class="btn-delete">Delete</button>
+            </div>
+        `;
+
+                        taskList.prepend(newTask);
+                        updateTaskCounts();
+
+                        // Clear inputs
+                        document.getElementById('taskTitle').value = '';
+                        document.getElementById('taskDate').value = '';
+                        document.getElementById('taskDescription').value = '';
+                    }
+                }
+
                 document.addEventListener('DOMContentLoaded', function() {
                     // Activate sidebar by default when page loads
                     document.getElementById('sidebar').classList.add('active');
@@ -731,9 +937,11 @@
                                 if (filter === 'all') {
                                     item.style.display = '';
                                 } else if (filter === 'active') {
-                                    item.style.display = item.classList.contains('completed') ? 'none' : '';
+                                    item.style.display = item.classList.contains('completed') ?
+                                        'none' : '';
                                 } else if (filter === 'completed') {
-                                    item.style.display = item.classList.contains('completed') ? '' : 'none';
+                                    item.style.display = item.classList.contains('completed') ? '' :
+                                        'none';
                                 }
                             });
                         });
@@ -768,14 +976,14 @@
                         newTask.className = 'task-item';
 
                         newTask.innerHTML = `
-                <div class="priority-indicator priority-medium"></div>
-                <input type="checkbox" class="task-checkbox">
-                <span class="task-text">${taskText}</span>
-                <div class="task-actions">
-                    <button class="btn-edit">Edit</button>
-                    <button class="btn-delete">Delete</button>
-                </div>
-            `;
+                            <div class="priority-indicator priority-medium"></div>
+                            <input type="checkbox" class="task-checkbox">
+                            <span class="task-text">${taskText}</span>
+                            <div class="task-actions">
+                                <button class="btn-edit">Edit</button>
+                                <button class="btn-delete">Delete</button>
+                            </div>
+                        `;
 
                         taskList.prepend(newTask);
                         input.value = '';
