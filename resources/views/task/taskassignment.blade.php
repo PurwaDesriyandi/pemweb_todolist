@@ -3,7 +3,6 @@
 @section('title', "Today's Tasks")
 
 @push('styles')
-{{-- CSS ini penting untuk mengubah tampilan task yang sudah selesai --}}
 <style>
     .task-item.completed .task-text {
         text-decoration: line-through;
@@ -24,7 +23,6 @@
     <div class="card">
         <div class="card-header">
             <div class="card-title">Today's Tasks</div>
-            {{-- ID ditambahkan agar mudah diupdate oleh JavaScript --}}
             <div class="card-stats" id="task-stats">3 tasks remaining</div>
         </div>
         <div class="card-body">
@@ -86,7 +84,6 @@
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // 1. Memilih semua elemen yang dibutuhkan
     const taskList = document.getElementById('task-list');
     const addTaskInput = document.getElementById('add-task-input');
     const addTaskBtn = document.getElementById('add-task-btn');
@@ -95,38 +92,31 @@ document.addEventListener('DOMContentLoaded', function() {
     const progressFill = document.getElementById('progress-fill');
     const progressText = document.getElementById('progress-text');
 
-    // 2. Fungsi utama untuk memperbarui UI (progress bar dan sisa task)
     function updateUI() {
         const allTasks = document.querySelectorAll('.task-item');
         const completedTasks = document.querySelectorAll('.task-item.completed');
         const remainingTasks = allTasks.length - completedTasks.length;
 
-        // Update teks sisa task
         taskStats.textContent = `${remainingTasks} tasks remaining`;
 
-        // Update progress bar
         const progressPercent = allTasks.length > 0 ? (completedTasks.length / allTasks.length) * 100 : 0;
         progressFill.style.width = `${progressPercent}%`;
         progressText.textContent = `${Math.round(progressPercent)}%`;
     }
 
-    // 3. Fungsi untuk menangani semua aksi di dalam daftar task
     taskList.addEventListener('click', function(e) {
         const target = e.target;
 
-        // Aksi untuk Checkbox
         if (target.classList.contains('task-checkbox')) {
             target.closest('.task-item').classList.toggle('completed', target.checked);
         }
 
-        // Aksi untuk tombol Delete
         if (target.classList.contains('btn-delete')) {
             if (confirm('Are you sure you want to delete this task?')) {
                 target.closest('.task-item').remove();
             }
         }
 
-        // Aksi untuk tombol Edit
         if (target.classList.contains('btn-edit')) {
             const taskItem = target.closest('.task-item');
             const taskTextElement = taskItem.querySelector('.task-text');
@@ -138,16 +128,12 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
 
-        // Panggil updateUI setelah ada aksi
         updateUI();
     });
 
-    // 4. Fungsi untuk Filter
     filterButtons.forEach(button => {
         button.addEventListener('click', function() {
-            // Hapus kelas 'active' dari semua tombol
             filterButtons.forEach(btn => btn.classList.remove('active'));
-            // Tambahkan kelas 'active' ke tombol yang diklik
             this.classList.add('active');
 
             const filter = this.dataset.filter;
@@ -165,10 +151,9 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // 5. Fungsi untuk Menambah Task Baru
     function addNewTask() {
         const text = addTaskInput.value.trim();
-        if (text === '') return; // Jangan tambah task kosong
+        if (text === '') return;
 
         const newTaskHTML = `
             <div class="priority-indicator priority-medium"></div>
@@ -183,8 +168,8 @@ document.addEventListener('DOMContentLoaded', function() {
         li.className = 'task-item';
         li.innerHTML = newTaskHTML;
 
-        taskList.prepend(li); // Tambah task baru di paling atas
-        addTaskInput.value = ''; // Kosongkan input
+        taskList.prepend(li);
+        addTaskInput.value = '';
         updateUI();
     }
 
@@ -195,7 +180,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Panggil updateUI saat halaman pertama kali dimuat
     updateUI();
 });
 </script>

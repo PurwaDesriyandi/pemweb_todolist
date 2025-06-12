@@ -3,7 +3,6 @@
 @section('title', 'Upcoming Tasks')
 
 @push('styles')
-{{-- Style ini untuk merapikan tampilan daftar task --}}
 <style>
     .task-list { list-style-type: none; padding: 0; }
     .task-item {
@@ -27,9 +26,6 @@
 
 @section('content')
 @php
-    // --- DATA SIMULASI ---
-    // Di aplikasi nyata, array $tasks ini akan dikirim dari Controller.
-    // Tanggalnya sudah diubah menjadi Juni dan Juli 2025.
     $tasks = [
         ['title' => 'Quarterly review meeting', 'priority' => 'high', 'due_date' => '2025-06-15'],
         ['title' => 'Client presentation', 'priority' => 'high', 'due_date' => '2025-06-18'],
@@ -46,7 +42,6 @@
     <div class="card">
         <div class="card-header">
             <div class="card-title">Upcoming Tasks</div>
-            {{-- Jumlah task sekarang dihitung secara dinamis --}}
             <div class="card-stats">{{ count($tasks) }} tasks</div>
         </div>
         <div class="card-body">
@@ -56,7 +51,6 @@
                         <div class="priority-indicator priority-{{ $task['priority'] }}"></div>
                         <input type="checkbox" class="task-checkbox">
                         <span class="task-text">{{ $task['title'] }}</span>
-                        {{-- Tanggal diformat secara otomatis dari data array --}}
                         <div class="task-date">
                             {{ \Carbon\Carbon::parse($task['due_date'])->format('M d') }}
                         </div>
@@ -74,7 +68,6 @@
 
 @push('scripts')
 <script>
-    // Script untuk membuat checkbox interaktif
     document.addEventListener('DOMContentLoaded', function() {
         const taskList = document.getElementById('upcoming-task-list');
         if (taskList) {
