@@ -1,3 +1,4 @@
+@extends ('dashboard')
 <style>
     :root {
         --primary: #4361ee;

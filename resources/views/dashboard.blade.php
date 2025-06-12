@@ -563,7 +563,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/taskassignment">
+                <a class="nav-link" data-bs-toggle="collapsed" href="/taskassignment">
                     <i class="bi bi-list-task"></i>
                     <span>Tasks Assignment</span>
                 </a>
@@ -589,7 +589,7 @@
         </ul>
     </div>
 
-    {{-- <!-- Main Content -->
+{{-- <!-- Main Content -->
     <main class="page-content" id="content">
         <div class="container">
             <header>
@@ -597,7 +597,7 @@
                 <div class="date-display" id="currentDate">Wednesday, May 21, 2025</div>
             </header> --}}
 
-    @extends('task.app')
+    @include('task.app')
 
             {{-- <div class="summary-card card">
                 <div class="card-header">
@@ -644,6 +644,23 @@
 
             toggleSidebar.addEventListener('click', function() {
                 toggleSidebar.classList.toggle('active');
+
+            addTaskButton.addEventListener('click', function() {
+                addNewTask();
+            });
+
+            addTaskInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    addNewTask();
+                }
+            });
+
+            // Filter buttons
+            const filterButtons = document.querySelectorAll('.filter-btn');
+
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Remove active class from all buttons
                 sidebar.classList.toggle('active');
                 content.classList.toggle('sidebar-active');
             });
@@ -680,120 +697,3 @@
 
             // Add task functionality
             const addTaskInput = document.querySelector('.task-input input');
-            const addTaskButton = document.querySelector('.task-input button');
-
-            addTaskButton.addEventListener('click', function() {
-                addNewTask();
-            });
-
-            addTaskInput.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    addNewTask();
-                }
-            });
-
-            // Filter buttons
-            const filterButtons = document.querySelectorAll('.filter-btn');
-
-            filterButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    // Remove active class from all buttons
-                    filterButtons.forEach(btn => btn.classList.remove('active'));
-
-                    // Add active class to clicked button
-                    this.classList.add('active');
-
-                    // Apply filter
-                    const filter = this.textContent.toLowerCase();
-                    const taskItems = document.querySelectorAll('.task-list .task-item');
-
-                    taskItems.forEach(item => {
-                        if (filter === 'all') {
-                            item.style.display = '';
-                        } else if (filter === 'active') {
-                            item.style.display = item.classList.contains('completed') ? 'none' : '';
-                        } else if (filter === 'completed') {
-                            item.style.display = item.classList.contains('completed') ? '' : 'none';
-                        }
-                    });
-                });
-            });
-
-            // Delete task buttons
-            document.addEventListener('click', function(e) {
-                if (e.target.classList.contains('btn-delete')) {
-                    const taskItem = e.target.closest('.task-item');
-                    taskItem.remove();
-                    updateTaskCounts();
-                }
-            });
-
-            // Set current date
-            document.getElementById('currentDate').textContent = new Date().toLocaleDateString('en-US', {
-                weekday: 'long',
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
-            });
-        });
-
-        function addNewTask() {
-            const input = document.querySelector('.task-input input');
-            const taskText = input.value.trim();
-
-            if (taskText) {
-                const taskList = document.querySelector('.task-list');
-
-                const newTask = document.createElement('li');
-                newTask.className = 'task-item';
-
-                newTask.innerHTML = `
-                <div class="priority-indicator priority-medium"></div>
-                <input type="checkbox" class="task-checkbox">
-                <span class="task-text">${taskText}</span>
-                <div class="task-actions">
-                    <button class="btn-edit">Edit</button>
-                    <button class="btn-delete">Delete</button>
-                </div>
-            `;
-
-                taskList.prepend(newTask);
-                input.value = '';
-                updateTaskCounts();
-            }
-        }
-
-        function updateTaskCounts() {
-            // This is a simplified version - in a real app you'd have more robust logic
-            const totalTasks = document.querySelectorAll('.task-item').length;
-            const completedTasks = document.querySelectorAll('.task-item.completed').length;
-            const remainingTasks = totalTasks - completedTasks;
-
-            const taskStats = document.querySelector('.card-stats');
-            if (taskStats) {
-                taskStats.textContent = `${remainingTasks} tasks remaining`;
-            }
-
-            // Update progress bar
-            const progressPercentage = totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0;
-            const progressFill = document.querySelector('.progress-fill');
-            if (progressFill) {
-                progressFill.style.width = `${progressPercentage}%`;
-            }
-
-            const progressText = document.querySelector('.progress-section span:last-child');
-            if (progressText) {
-                progressText.textContent = `${Math.round(progressPercentage)}%`;
-            }
-        }
-
-
-
-        // Handle window resize
-        window.addEventListener('resize', function() {
-            // No special handling needed since sidebar works the same at all screen sizes
-        });
-    </script>
-</body>
-
-</html>
