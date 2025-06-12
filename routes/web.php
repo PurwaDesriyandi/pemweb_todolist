@@ -2,10 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DashboardController;
 
-Route::get('/', function () {
-    return view('dashboard');
-})->middleware('auth');
 
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 
@@ -14,17 +12,24 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::get('/register', function () {
     return view('auth/register');
 });
+Route::post('/register', [AuthController::class, 'register']);
 
-Route::post('/logout', [AuthController::class, 'logout']);
+Route::middleware(['auth', 'role:admin'])->group(function () {
 
-Route::get('/task-assignment', function (){
-    return view('task/taskassignment');
-})->middleware('auth');
+    Route::get('/', [DashboardController::class, 'index']);
 
-Route::get('/calendar', function (){
-    return view('task/calendar');
-})->middleware('auth');
+    Route::get('/task-assignment', function (){
+        return view('task.taskassignment');
+    });
 
-Route::get('/upcoming-task', function (){
-    return view('task/upcomingtask');
-})->middleware('auth');
+    Route::get('/calendar', function (){
+        return view('task.calendar');
+    });
+
+    Route::get('/upcoming-task', function (){
+        return view('task.upcomingtask');
+    });
+
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+});

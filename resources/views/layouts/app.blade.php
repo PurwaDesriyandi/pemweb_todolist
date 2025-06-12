@@ -71,11 +71,16 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/login">
-                    <i class="bi bi-box-arrow-right"></i>
-                    <span>Logout</span>
-                </a>
-            </li>
+    {{-- Form ini akan mengirim request POST saat link di dalamnya di-klik --}}
+    <form method="POST" action="{{ route('logout') }}">
+        @csrf
+        <a class="nav-link" href="{{ route('logout') }}"
+           onclick="event.preventDefault(); this.closest('form').submit();">
+            <i class="bi bi-box-arrow-right"></i>
+            <span>Logout</span>
+        </a>
+    </form>
+</li>
         </ul>
     </div>
 
