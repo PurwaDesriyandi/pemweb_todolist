@@ -12,7 +12,7 @@
         </div>
     @endif
 
-
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <div class="container">
         <div class="card">
             <div class="card-header">
@@ -24,15 +24,15 @@
                 <div class="filter-container">
                     <div class="filters">
                         <button class="filter-btn active" data-filter="all"> All </button>
-                        <button class="filter-btn" data-filter="running"> Running </button>
-                        <button class="filter-btn" data-filter="completed"> Completed </button>
+                        {{-- <button class="filter-btn" data-filter="running"> Running </button> --}}
+                        <button class="filter-btn" data-filter="completed" id="filter-completed"> Completed </button>
                     </div>
                     <button class="btn btn-primary" onclick="openAddModal()">Add Task</button>
                 </div>
                 <ul class="task-list" id="task-list">
                     @foreach ($tasks as $task)
-                        <li class="task-item">
-                            <input type="checkbox" class="task-checkbox">
+                        <li class="task-item" data-status="{{ $task->status }}">
+                            <input type="checkbox" class="task-checkbox" data-id="{{ $task->id }}" {{ $task->status === 'Selesai' ? 'checked' : '' }}>
                             <div class="task-content">
                                 <div class="task-title">
                                     {{ $task->title }}
@@ -59,14 +59,13 @@
                         </li>
                     @endforeach
                 </ul>
-
                 <div class="progress-section">
                     <div style="display: flex; justify-content: space-between; margin-bottom: 0.25rem;">
                         <span style="font-size: 0.85rem;">Daily Progress</span>
                         <span id="progress-text" style="font-size: 0.85rem;">0%</span>
                     </div>
                     <div class="progress-bar">
-                        <div class="progress-fill" id="progress-fill" style="width: 33%;"></div>
+                        <div class="progress-fill" id="progress-fill" style="width: 0%;"></div>
                     </div>
                 </div>
             </div>
@@ -76,11 +75,11 @@
     <!-- add -->
     <div id="addTaskModal" class="modal">
         <div class="modal-content">
-            <form action="{{ route('task.store') }}" method="POST">
+            <div class="modal-header">                  
+                <h3 class="modal-title">Add Task</h3>
+            </div>
+            <form id="addTaskForm" action="{{ route('task.store') }}" method="POST">
                 @csrf
-                <div class="modal-header">                  
-                    <h3 class="modal-title">Add Task</h3>
-                </div>
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="title" class="form-label">Title</label>
@@ -105,7 +104,7 @@
     <!-- edit -->
     <div id="editTaskModal" class="modal">
         <div class="modal-content">
-            <form id="editTaskForm" method="POST">
+            <form id="editTaskForm" method="POST" action="{{ route('task.update', ['id' => $task->id]) }}">
                 @csrf
                 @method('PUT')
                 <div class="modal-header">
@@ -132,22 +131,83 @@
             </form>
         </div>
     </div>
-<script>
-    function openAddModal() {
-        document.getElementById('addTaskModal').style.display = 'block';
-    }
+    <script>
+        function openAddModal() {
+            document.getElementById('addTaskModal').style.display = 'block';
+        }
+        function openEditModal(task) {
+            const form = document.getElementById('editTaskForm');
+            form.action = `/task-assignment/${task.id}`;
+            document.getElementById('editTitle').value = task.title;
+            document.getElementById('editDescription').value = task.description;
+            document.getElementById('editDeadline').value = task.deadline;
+            document.getElementById('editTaskModal').style.display = 'block';
+        }
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+    
 
-    function openEditModal(task) {
-        const form = document.getElementById('editTaskForm');
-        form.action = `/task-assignment/${task.id}`;
-        document.getElementById('editTitle').value = task.title;
-        document.getElementById('editDescription').value = task.description;
-        document.getElementById('editDeadline').value = task.deadline;
-        document.getElementById('editTaskModal').style.display = 'block';
-    }
+        document.addEventListener('DOMContentLoaded', () => {
+            const checkboxes = document.querySelectorAll('.task-checkbox');
+            const progressText = document.getElementById('progress-text');
+            const progressFill = document.getElementById('progress-fill');
+            const taskList = document.getElementById('task-list');
+            const completedTasks = document.getElementById('completed-tasks');
 
-    function closeModal(modalId) {
-        document.getElementById(modalId).style.display = 'none';
-    }
-</script>
+            function updateProgress() {
+                const totalTasks = checkboxes.length;
+                const completedTasksCount = Array.from(checkboxes).filter(checkbox => checkbox.checked).length;
+                const progress = totalTasks > 0 ? (completedTasksCount / totalTasks) * 100 : 0;
+
+                progressText.textContent = `${Math.round(progress)}%`;
+                progressFill.style.width = `${progress}%`;
+            }
+
+            function moveTask(checkbox) {
+                const taskItem = checkbox.closest('.task-item');
+                if (checkbox.checked) {
+                    completedTasks.appendChild(taskItem);
+                } else {
+                    taskList.appendChild(taskItem);
+                }
+            }
+
+            if (checkboxes.length > 0) {
+                checkboxes.forEach(checkbox => {
+                    checkbox.addEventListener('change', () => {
+                        const taskId = checkbox.getAttribute('data-id');
+                        const status = checkbox.checked ? 'Selesai' : 'Belum Selesai';
+
+                        if (taskId) {
+                            fetch(`/task/update-status/${taskId}`, {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                                },
+                                body: JSON.stringify({ status })
+                            })
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error('Failed to update task status');
+                                }
+                                return response.json();
+                            })
+                            .then(data => {
+                                console.log('Task status updated:', data);
+                                moveTask(checkbox);
+                                updateProgress();
+                            })
+                            .catch(error => {
+                                console.error('Error updating task status:', error);
+                            });
+                        }
+                    });
+                });
+            }
+
+            updateProgress();
+        });
+    </script>
 @endsection

@@ -59,4 +59,12 @@ class TaskController extends Controller
 
         return redirect()->route('task.assignment')->with('success', 'Task deleted successfully.');
     }
+
+    public function updateStatus(Request $request, $id){
+        $task = Task::findOrFail($id);
+        $task->status = $request->status; // 'Selesai' atau 'Belum Selesai'
+        $task->save();
+    
+        return response()->json(['success' => true]);
+    }
 }
