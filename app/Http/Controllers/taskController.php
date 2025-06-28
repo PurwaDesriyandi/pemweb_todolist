@@ -65,6 +65,6 @@ class TaskController extends Controller
         $task->status = $request->status; // 'Selesai' atau 'Belum Selesai'
         $task->save();
     
-        return response()->json(['success' => true]);
+        return response()->json(['message' => 'Task status updated successfully']);
     }
 }
