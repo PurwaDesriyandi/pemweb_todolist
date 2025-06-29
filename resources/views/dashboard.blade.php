@@ -15,21 +15,21 @@
         </div>
         <div class="summary-stats">
             <div class="stat-box">
-                <div class="stat-number">12</div>
-                <div class="stat-label">Total Tasks</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-number">5</div>
-                <div class="stat-label">Completed</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-number">3</div>
-                <div class="stat-label">Due Today</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-number">4</div>
-                <div class="stat-label">Overdue</div>
-            </div>
+            <div class="stat-number">{{ $totalTasks }}</div>
+            <div class="stat-label">Total Tasks</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-number">{{ $completedCount }}</div>
+            <div class="stat-label">Completed</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-number">{{ $dueTodayCount }}</div>
+            <div class="stat-label">Due Today</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-number">{{ $overdueCount }}</div>
+            <div class="stat-label">Overdue</div>
+        </div>
         </div>
     </div>
 

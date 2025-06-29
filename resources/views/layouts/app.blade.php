@@ -67,7 +67,7 @@
             <li class="nav-item">
                 <a class="nav-link {{ request()->is('upcoming-task') ? 'active' : '' }}" href="/upcoming-task">
                     <i class="bi bi-bar-chart-line"></i>
-                    <span>Upcoming Tasks</span>
+                    <span>Role</span>
                 </a>
             </li>
             <li class="nav-item">

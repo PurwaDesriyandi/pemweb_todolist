@@ -228,7 +228,7 @@ h6 {
 .card-footer {
   border-color: #ebeef4;
   background-color: #fff;
-  color: #798eb3;
+  color: #4299e1;
   padding: 15px;
 }
 
@@ -1232,7 +1232,7 @@ h6 {
   color: #012970;
 }
         :root {
-            --primary: #4361ee;
+            --primary: #4299e1;
             --secondary: #3f37c9;
             --success: #4cc9f0;
             --danger: #f72585;
@@ -1274,7 +1274,7 @@ h6 {
         .navbar-brand {
             font-size: 1.5rem;
             font-weight: 700;
-            color: var(--primary);
+            color:#4299e1;
             text-decoration: none;
         }
 
@@ -1329,7 +1329,7 @@ h6 {
         .sidebar {
             width: 220px;
             background-color: white;
-            border-right: 2px solid #0400ff;
+            border-right: 2px solid #4299e1;
             padding-top: 20px;
             height: 100vh;
             position: fixed;
@@ -1379,7 +1379,7 @@ h6 {
 
         .sidebar .nav-link:hover,
         .sidebar .nav-link.active {
-            color: #0400ff;
+            color: #4299e1;
             background-color: #f0f0f0;
         }
 
@@ -1763,11 +1763,13 @@ h6 {
         opacity: 0;
         visibility: hidden;
         transition: all 0.3s ease;
+        display: none;
     }
 
     .modal-overlay.active {
         opacity: 1;
         visibility: visible;
+        display: flex;
     }
 
     .modal-content {
@@ -1780,6 +1782,7 @@ h6 {
         transition: transform 0.3s ease;
         padding: 25px;
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        position: relative;
     }
 
     .modal-overlay.active .modal-content {

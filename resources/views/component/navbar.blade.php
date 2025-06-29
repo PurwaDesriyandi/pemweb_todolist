@@ -510,8 +510,6 @@
             <a href="/" class="navbar-brand">ToDoList </a>
             <div class="hamburger" id="toggleSidebar">
                 <span></span>
-                <span></span>
-                <span></span>
             </div>
 
         </div>

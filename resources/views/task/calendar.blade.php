@@ -126,13 +126,34 @@ document.addEventListener('DOMContentLoaded', function() {
     const prevButton = document.getElementById('prev-month');
     const nextButton = document.getElementById('next-month');
 
-    const tasks = {
-        '2025-06-18': 'Team Meeting',
-        '2025-06-20': 'Project Alpha Deadline',
-        '2025-07-04': 'Submit Report'
-    };
-
     let currentDate = new Date();
+
+    let tasks = {};
+
+    // Function to fetch active tasks from API and update tasks object
+    function fetchActiveTasks() {
+        fetch('/api/active-tasks')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    tasks = {};
+                    // Build a map of date to array of task objects
+                    data.tasks.forEach(task => {
+                        if (!tasks[task.deadline]) {
+                            tasks[task.deadline] = [];
+                        }
+                        tasks[task.deadline].push({
+                            title: task.title,
+                            description: task.description
+                        });
+                    });
+                    renderCalendar(currentDate);
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching active tasks:', error);
+            });
+    }
 
     function renderCalendar(date) {
         calendarBody.innerHTML = '';
@@ -167,7 +188,22 @@ document.addEventListener('DOMContentLoaded', function() {
             const dateString = `${year}-${String(month + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
             if (tasks[dateString]) {
                 dayElement.classList.add('has-tasks');
-                dayElement.setAttribute('title', tasks[dateString]);
+                // Clear existing text content and add day number
+                dayElement.textContent = '';
+                const dayNumber = document.createElement('div');
+                dayNumber.textContent = i;
+                dayNumber.style.fontWeight = 'bold';
+                dayElement.appendChild(dayNumber);
+
+                // Add task info elements
+                tasks[dateString].forEach(task => {
+                    const taskInfo = document.createElement('div');
+                    taskInfo.style.fontSize = '0.7rem';
+                    taskInfo.style.marginTop = '2px';
+                    taskInfo.style.textAlign = 'left';
+                    taskInfo.textContent = `${task.title}${task.description ? ': ' + task.description : ''}`;
+                    dayElement.appendChild(taskInfo);
+                });
             }
 
             calendarBody.appendChild(dayElement);
@@ -184,7 +220,7 @@ document.addEventListener('DOMContentLoaded', function() {
         renderCalendar(currentDate);
     });
 
-    renderCalendar(currentDate);
+    fetchActiveTasks();
 });
 </script>
 @endpush

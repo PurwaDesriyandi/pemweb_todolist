@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\TaskController;
 
 
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
@@ -18,16 +19,20 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
     Route::get('/', [DashboardController::class, 'index']);
 
-    Route::get('/task-assignment', function (){
-        return view('task.taskassignment');
-    });
+    Route::get('/task-assignment', [TaskController::class, 'index'])->name('task.assignment');
 
-    Route::get('/calendar', function (){
-        return view('task.calendar');
-    });
+    Route::get('/tasks', [TaskController::class, 'index'])->name('tasks.index');
+    Route::post('/tasks', [TaskController::class, 'store'])->name('tasks.store');
+    Route::match(['put', 'patch'], '/tasks/{task}', [TaskController::class, 'update'])->name('tasks.update');
+    Route::delete('/tasks/{task}', [TaskController::class, 'destroy'])->name('tasks.destroy');
 
-    Route::get('/upcoming-task', function (){
-        return view('task.upcomingtask');
+    Route::put('/tasks/{task}/toggle-status', [TaskController::class, 'toggleStatus'])->name('tasks.toggleStatus');
+
+    Route::get('/calendar', [TaskController::class, 'calendar']);
+    Route::get('/api/active-tasks', [TaskController::class, 'activeTasks']);
+
+    Route::get('/role', function (){
+        return view('role.index');
     });
 
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
