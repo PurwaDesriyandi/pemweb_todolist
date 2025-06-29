@@ -4,7 +4,6 @@
 
 @push('styles')
 <style>
-
     .calendar-card .card-header {
         display: flex;
         justify-content: space-between;
@@ -52,11 +51,14 @@
         border-radius: 5px;
         aspect-ratio: 1;
         display: flex;
-        justify-content: center;
+        flex-direction: column;
+        justify-content: flex-start;
         align-items: center;
         border: 1px solid #e9ecef;
         position: relative;
         font-weight: 500;
+        min-height: 80px;
+        padding: 0.25rem;
     }
 
     .calendar-day.prev-month,
@@ -87,6 +89,44 @@
     .calendar-day.today.has-tasks::after {
         background-color: white;
     }
+
+    .day-number {
+        font-weight: 600;
+        margin-bottom: 0.25rem;
+    }
+
+    .task-list {
+        width: 100%;
+        flex-grow: 1;
+        overflow: hidden;
+    }
+
+    .task-item {
+        font-size: 0.7rem;
+        padding: 0.1rem 0.2rem;
+        margin-bottom: 0.1rem;
+        background-color: rgba(67, 97, 238, 0.8);
+        color: white;
+        border-radius: 2px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+        cursor: pointer;
+    }
+
+    .task-item.completed {
+        background-color: #28a745 !important;
+    }
+
+    .calendar-day.today .task-item {
+        background-color: rgba(255, 255, 255, 0.9);
+        color: #4361ee;
+    }
+
+    .calendar-day.today .task-item.completed {
+        background-color: rgba(40, 167, 69, 0.9) !important;
+        color: white;
+    }
 </style>
 @endpush
 
@@ -116,75 +156,132 @@
         </div>
     </div>
 </div>
-@endsection
+
+<script>
+   window.tasksData = @json($tasks ?? []);
+</script>
 
 @push('scripts')
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const calendarBody = document.getElementById('calendar-body');
-    const monthYearDisplay = document.getElementById('month-year');
-    const prevButton = document.getElementById('prev-month');
-    const nextButton = document.getElementById('next-month');
+    document.addEventListener('DOMContentLoaded', function () {
+        const calendarBody = document.getElementById('calendar-body');
+        const monthYearDisplay = document.getElementById('month-year');
+        const prevButton = document.getElementById('prev-month');
+        const nextButton = document.getElementById('next-month');
 
-    const tasks = {
-        '2025-06-18': 'Team Meeting',
-        '2025-06-20': 'Project Alpha Deadline',
-        '2025-07-04': 'Submit Report'
-    };
+        const tasks = {};
 
-    let currentDate = new Date();
-
-    function renderCalendar(date) {
-        calendarBody.innerHTML = '';
-        const year = date.getFullYear();
-        const month = date.getMonth();
-
-        monthYearDisplay.textContent = date.toLocaleDateString('en-US', {
-            month: 'long',
-            year: 'numeric'
-        });
-
-        const firstDayOfMonth = new Date(year, month, 1);
-        const daysInMonth = new Date(year, month + 1, 0).getDate();
-        const startingDay = firstDayOfMonth.getDay();
-
-        for (let i = 0; i < startingDay; i++) {
-            const dayElement = document.createElement('div');
-            dayElement.classList.add('calendar-day', 'prev-month');
-            calendarBody.appendChild(dayElement);
+        // Process tasks data
+        if (window.tasksData && Array.isArray(window.tasksData)) {
+            window.tasksData.forEach(task => {
+                if (task && task.deadline) {
+                    const deadline = task.deadline; 
+                    if (!tasks[deadline]) {
+                        tasks[deadline] = [];
+                    }
+                    tasks[deadline].push({
+                        title: task.title || 'Untitled',
+                        status: task.status || 'Belum Dikerjakan'
+                    });
+                }
+            });
         }
 
-        for (let i = 1; i <= daysInMonth; i++) {
-            const dayElement = document.createElement('div');
-            dayElement.classList.add('calendar-day');
-            dayElement.textContent = i;
+        let currentDate = new Date();
 
-            const today = new Date();
-            if (i === today.getDate() && year === today.getFullYear() && month === today.getMonth()) {
-                dayElement.classList.add('today');
+        function renderCalendar(date) {
+            if (!calendarBody) return;
+            
+            calendarBody.innerHTML = '';
+            const year = date.getFullYear();
+            const month = date.getMonth();
+
+            if (monthYearDisplay) {
+                monthYearDisplay.textContent = date.toLocaleDateString('en-US', {
+                    month: 'long',
+                    year: 'numeric',
+                });
             }
 
-            const dateString = `${year}-${String(month + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
-            if (tasks[dateString]) {
-                dayElement.classList.add('has-tasks');
-                dayElement.setAttribute('title', tasks[dateString]);
+            const firstDayOfMonth = new Date(year, month, 1);
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            const startingDay = firstDayOfMonth.getDay();
+
+            // empty cells for previous month
+            for (let i = 0; i < startingDay; i++) {
+                const emptyDay = document.createElement('div');
+                emptyDay.classList.add('calendar-day', 'prev-month');
+                calendarBody.appendChild(emptyDay);
             }
 
-            calendarBody.appendChild(dayElement);
+            // days of current month
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dayElement = document.createElement('div');
+                dayElement.classList.add('calendar-day');
+
+                const dayNumber = document.createElement('div');
+                dayNumber.classList.add('day-number');
+                dayNumber.textContent = day;
+                dayElement.appendChild(dayNumber);
+
+                const dateString = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+
+                // tasks for this date
+                if (tasks[dateString] && tasks[dateString].length > 0) {
+                    dayElement.classList.add('has-tasks');
+                    const taskList = document.createElement('div');
+                    taskList.classList.add('task-list');
+                    
+                    tasks[dateString].forEach(task => {
+                        const taskItem = document.createElement('div');
+                        taskItem.classList.add('task-item');
+                        if (task.status === 'Selesai') {
+                            taskItem.classList.add('completed');
+                        }
+                        taskItem.textContent = task.title;
+                        taskItem.title = task.title; // Full title on hover
+                        taskList.appendChild(taskItem);
+                    });
+                    dayElement.appendChild(taskList);
+                }
+
+                // Highlight today
+                const today = new Date();
+                if (day === today.getDate() && year === today.getFullYear() && month === today.getMonth()) {
+                    dayElement.classList.add('today');
+                }
+
+                calendarBody.appendChild(dayElement);
+            }
+
+            // Fill remaining cells for next month
+            const totalCells = calendarBody.children.length;
+            const remainingCells = 42 - totalCells; 
+            for (let i = 0; i < remainingCells; i++) {
+                const emptyDay = document.createElement('div');
+                emptyDay.classList.add('calendar-day', 'next-month');
+                calendarBody.appendChild(emptyDay);
+            }
         }
-    }
 
-    prevButton.addEventListener('click', () => {
-        currentDate.setMonth(currentDate.getMonth() - 1);
+        // Event listeners
+        if (prevButton) {
+            prevButton.addEventListener('click', () => {
+                currentDate.setMonth(currentDate.getMonth() - 1);
+                renderCalendar(currentDate);
+            });
+        }
+
+        if (nextButton) {
+            nextButton.addEventListener('click', () => {
+                currentDate.setMonth(currentDate.getMonth() + 1);
+                renderCalendar(currentDate);
+            });
+        }
+
+        // Initial render
         renderCalendar(currentDate);
     });
-
-    nextButton.addEventListener('click', () => {
-        currentDate.setMonth(currentDate.getMonth() + 1);
-        renderCalendar(currentDate);
-    });
-
-    renderCalendar(currentDate);
-});
 </script>
 @endpush
+@endsection

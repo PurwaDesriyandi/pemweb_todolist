@@ -61,10 +61,27 @@ class TaskController extends Controller
     }
 
     public function updateStatus(Request $request, $id){
+        $request->validate([
+            'status' => 'required|in:Selesai,Belum Dikerjakan',
+        ]);
+    
         $task = Task::findOrFail($id);
-        $task->status = $request->status; // 'Selesai' atau 'Belum Selesai'
+        $task->status = $request->status; 
         $task->save();
     
         return response()->json(['message' => 'Task status updated successfully']);
+    }
+
+    public function showCalendar(){
+        $tasks = Task::all(); 
+        return view('task.calendar', compact('tasks'));
+    }
+
+    public function upcomingTasks(){
+        $tasks = Task::whereDate('deadline', '>=', now()->toDateString()) 
+        ->orderBy('deadline', 'asc')   
+        ->get();
+
+        return view('task.upcomingtask', compact('tasks'));
     }
 }

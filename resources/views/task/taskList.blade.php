@@ -25,7 +25,7 @@
                     <div class="filters">
                         <button class="filter-btn active" data-filter="all"> All </button>
                         {{-- <button class="filter-btn" data-filter="running"> Running </button> --}}
-                        <button class="filter-btn" id="completed-btn"data-filter="completed" > Completed </button>
+                        <button class="filter-btn" id="completed-btn" data-filter="completed" > Completed </button>
                     </div>
                     <button class="btn btn-primary" onclick="openAddModal()">Add Task</button>
                 </div>
@@ -153,7 +153,8 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             const taskList = document.querySelector('#task-list');
-            const progressBar = document.querySelector('.progress-fill');
+            const progressBar = document.querySelector('#progress-fill');
+            const progressText = document.querySelector('#progress-text');
             const filterButtons = document.querySelectorAll('.filter-btn');
 
             // Update progress bar
@@ -162,27 +163,52 @@
                 const completedTasks = document.querySelectorAll('.task-item.completed').length;
                 const progress = totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0;
                 progressBar.style.width = `${progress}%`;
+                progressText.textContent = `${Math.round(progress)}%`;
                 console.log(`Progress: ${progress}%`);
+            };
+
+            // Update task status backend
+            const updateTaskStatus = (taskId, status) => {
+                fetch(`/tasks/${taskId}/update-status`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    },
+                    body: JSON.stringify({ status })
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        console.error('Failed to update task status');
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Task status updated successfully:', data);
+                    updateProgress(); 
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    location.reload();
+                });
             };
 
             // Toggle task status
             taskList.addEventListener('change', (e) => {
                 if (e.target.classList.contains('task-checkbox')) {
                     const taskItem = e.target.closest('.task-item');
-                    const taskStatus = taskItem.querySelector('.task-status');
                     const taskId = e.target.dataset.id;
 
                     if (e.target.checked) {
                         taskItem.classList.add('completed');
-                        taskStatus.textContent = 'Selesai';
+                        taskItem.setAttribute('data-status', 'Selesai');
                         updateTaskStatus(taskId, 'Selesai');
                     } else {
                         taskItem.classList.remove('completed');
-                        taskStatus.textContent = 'Belum Dikerjakan';
+                        taskItem.setAttribute('data-status', 'Belum Dikerjakan');
                         updateTaskStatus(taskId, 'Belum Dikerjakan');
                     }
-
-                    updateProgress();
                 }
             });
 
@@ -208,25 +234,24 @@
                     });
                 });
             });
-
-            // Update task status in the backend
-            const updateTaskStatus = (taskId, status) => {
-                fetch(`/tasks/${taskId}/update-status`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                    },
-                    body: JSON.stringify({ status })
-                }).then(response => {
-                    if (!response.ok) {
-                        console.error('Failed to update task status');
-                    }
-                });
-            };
-
             // Initialize progress bar
             updateProgress();
+
+            //search functionality
+            const searchInput = document.querySelector('.form-control[placeholder="Search..."]');
+            const tasks = document.querySelectorAll('.task-item');
+            searchInput.addEventListener('input', () => {
+                const query = searchInput.value.toLowerCase();
+
+                tasks.forEach(task => {
+                    const title = task.querySelector('.task-title').textContent.toLowerCase();
+                    if (title.includes(query)) {
+                        task.style.display = 'flex'; // Show task
+                    } else {
+                        task.style.display = 'none'; // Hide task
+                    }
+                });
+            });
         });
     </script>
 @endsection
