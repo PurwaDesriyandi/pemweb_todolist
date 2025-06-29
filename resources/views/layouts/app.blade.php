@@ -53,7 +53,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link {{ request()->is('task-assignment') ? 'active' : '' }}" href="/task-assignment">
+                <a class="nav-link {{ request()->is('task-list') ? 'active' : '' }}" href="/task-list">
                     <i class="bi bi-list-task"></i>
                     <span>Today's Tasks</span>
                 </a>
