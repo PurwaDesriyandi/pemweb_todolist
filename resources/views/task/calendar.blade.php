@@ -152,6 +152,43 @@
                 <div class="calendar-header">Sat</div>
             </div>
             <div class="calendar-grid" id="calendar-body">
+                <div class="calendar-day"></div>
+                    <div class="calendar-day"></div>
+                    <div class="calendar-day"></div>
+                    <div class="calendar-day today">
+                        <div class="day-number">30</div>
+                    </div>
+                    <div class="calendar-day has-tasks">
+                        <div class="day-number">1</div>
+                    </div>
+                    <div class="calendar-day has-tasks">
+                        <div class="day-number">2</div>
+                    </div>
+                    <div class="calendar-day">
+                        <div class="day-number">3</div>
+                    </div>
+
+                    <div class="calendar-day">
+                        <div class="day-number">4</div>
+                    </div>
+                    <div class="calendar-day has-tasks">
+                        <div class="day-number">5</div>
+                    </div>
+                    <div class="calendar-day">
+                        <div class="day-number">6</div>
+                    </div>
+                    <div class="calendar-day has-tasks">
+                        <div class="day-number">7</div>
+                    </div>
+                    <div class="calendar-day">
+                        <div class="day-number">8</div>
+                    </div>
+                    <div class="calendar-day">
+                        <div class="day-number">9</div>
+                    </div>
+                    <div class="calendar-day">
+                        <div class="day-number">10</div>
+                    </div>
             </div>
         </div>
     </div>
@@ -169,7 +206,6 @@
         const prevButton = document.getElementById('prev-month');
         const nextButton = document.getElementById('next-month');
 
-<<<<<<< HEAD
     let currentDate = new Date();
 
     let tasks = {};
@@ -217,31 +253,13 @@
             const dayElement = document.createElement('div');
             dayElement.classList.add('calendar-day', 'prev-month');
             calendarBody.appendChild(dayElement);
-=======
-        const tasks = {};
-
-        // Process tasks data
-        if (window.tasksData && Array.isArray(window.tasksData)) {
-            window.tasksData.forEach(task => {
-                if (task && task.deadline) {
-                    const deadline = task.deadline; 
-                    if (!tasks[deadline]) {
-                        tasks[deadline] = [];
-                    }
-                    tasks[deadline].push({
-                        title: task.title || 'Untitled',
-                        status: task.status || 'Belum Dikerjakan'
-                    });
-                }
-            });
->>>>>>> 29c6d9275264bfafedb2897ee471d1c5308346f3
         }
 
         let currentDate = new Date();
 
         function renderCalendar(date) {
             if (!calendarBody) return;
-            
+
             calendarBody.innerHTML = '';
             const year = date.getFullYear();
             const month = date.getMonth();
@@ -253,7 +271,6 @@
                 });
             }
 
-<<<<<<< HEAD
             const dateString = `${year}-${String(month + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
             if (tasks[dateString]) {
                 dayElement.classList.add('has-tasks');
@@ -273,17 +290,6 @@
                     taskInfo.textContent = `${task.title}${task.description ? ': ' + task.description : ''}`;
                     dayElement.appendChild(taskInfo);
                 });
-=======
-            const firstDayOfMonth = new Date(year, month, 1);
-            const daysInMonth = new Date(year, month + 1, 0).getDate();
-            const startingDay = firstDayOfMonth.getDay();
-
-            // empty cells for previous month
-            for (let i = 0; i < startingDay; i++) {
-                const emptyDay = document.createElement('div');
-                emptyDay.classList.add('calendar-day', 'prev-month');
-                calendarBody.appendChild(emptyDay);
->>>>>>> 29c6d9275264bfafedb2897ee471d1c5308346f3
             }
 
             // days of current month
@@ -303,7 +309,7 @@
                     dayElement.classList.add('has-tasks');
                     const taskList = document.createElement('div');
                     taskList.classList.add('task-list');
-                    
+
                     tasks[dateString].forEach(task => {
                         const taskItem = document.createElement('div');
                         taskItem.classList.add('task-item');
@@ -328,7 +334,7 @@
 
             // Fill remaining cells for next month
             const totalCells = calendarBody.children.length;
-            const remainingCells = 42 - totalCells; 
+            const remainingCells = 42 - totalCells;
             for (let i = 0; i < remainingCells; i++) {
                 const emptyDay = document.createElement('div');
                 emptyDay.classList.add('calendar-day', 'next-month');
@@ -354,7 +360,6 @@
         // Initial render
         renderCalendar(currentDate);
     });
-<<<<<<< HEAD
 
     nextButton.addEventListener('click', () => {
         currentDate.setMonth(currentDate.getMonth() + 1);
@@ -363,8 +368,6 @@
 
     fetchActiveTasks();
 });
-=======
->>>>>>> 29c6d9275264bfafedb2897ee471d1c5308346f3
 </script>
 @endpush
 @endsection
