@@ -4,8 +4,6 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\TaskController;
-<<<<<<< HEAD
-=======
 
 // nambah route dewe mergo gaiso login
 
@@ -18,7 +16,7 @@ Route::get('/calendar', [TaskController::class, 'showCalendar'])->name('task.cal
 Route::get('/upcoming-task', [TaskController::class, 'upcomingTasks'])->name('upcoming.tasks');
 
 // batas route ku
->>>>>>> 29c6d9275264bfafedb2897ee471d1c5308346f3
+
 
 
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
@@ -34,7 +32,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
     Route::get('/', [DashboardController::class, 'index']);
 
-<<<<<<< HEAD
+
     Route::get('/task-assignment', [TaskController::class, 'index'])->name('task.assignment');
 
     Route::get('/tasks', [TaskController::class, 'index'])->name('tasks.index');
@@ -50,7 +48,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/role', function (){
         return view('role.index');
     });
-=======
+
     // Route::get('/task-assignment', function (){
     //     return view('task.taskassignment');
     // });
@@ -62,7 +60,6 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     // Route::get('/upcoming-task', function (){
     //     return view('task.upcomingtask');
     // });
->>>>>>> 29c6d9275264bfafedb2897ee471d1c5308346f3
 
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
