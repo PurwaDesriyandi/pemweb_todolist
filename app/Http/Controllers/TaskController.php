@@ -1,139 +1,87 @@
 <?php
-
 namespace App\Http\Controllers;
 
-use App\Models\task;
 use Illuminate\Http\Request;
-use Illuminate\Validation\ValidationException;
-use Exception;
+use App\Models\Task;
 
 class TaskController extends Controller
 {
-   public function index()
+    // show all assignment
+    public function index()
     {
-        $tasks = task::all(); // Mengambil semua tugas dari database
-        return view('task.taskassignment', compact('tasks')); // Mengirim data ke view
+        $tasks = Task::all();
+        return view('task.taskList', compact('tasks'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+    // add new task
     public function store(Request $request)
-{
-    try {
-        $validatedData = $request->validate([
-            'title' => 'required|max:255',
+    {
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
             'deadline' => 'required|date',
-            'description' => 'nullable',
         ]);
 
-        $task = task::create($validatedData); // Membuat task baru
+        Task::create([
+            'title' => $request->title,
+            'description' => $request->description,
+            'deadline' => $request->deadline,
+            'status' => 'Belum Dikerjakan', //default
+        ]);
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Task created successfully!',
-            'task' => $task // Kirim kembali objek task yang baru dibuat
-        ], 201); // 201 Created
-    } catch (\Illuminate\Validation\ValidationException $e) {
-        return response()->json([
-            'success' => false,
-            'message' => 'Validation failed',
-            'errors' => $e->errors()
-        ], 422); // Unprocessable Entity
-    } catch (\Exception $e) {
-        return response()->json([
-            'success' => false,
-            'message' => 'An error occurred: ' . $e->getMessage()
-        ], 500); // Internal Server Error
-    }
-}
-public function update(Request $request, task $task) // Menggunakan Route Model Binding
-    {
-        try {
-            $validatedData = $request->validate([
-                'title' => 'required|max:255',
-                'deadline' => 'required|date',
-                'description' => 'nullable',
-                'status' => 'in:Belum Dikerjakan,Sedang Dikerjakan,Selesai' // Tambahkan validasi untuk status
-            ]);
-
-            $task->update($validatedData); // Update task di database
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Task updated successfully!',
-                'task' => $task // Kirim kembali objek task yang diperbarui
-            ]);
-        } catch (ValidationException $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Validation failed',
-                'errors' => $e->errors()
-            ], 422);
-        } catch (Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'An error occurred: ' . $e->getMessage()
-            ], 500);
-        }
+        return redirect()->route('task.assignment')->with('success', 'Task created successfully.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(task $task) // Menggunakan Route Model Binding
+    // update task
+    public function update(Request $request, $id)
     {
-        try {
-            $task->delete(); // Hapus task dari database
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'deadline' => 'required|date',
+        ]);
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Task deleted successfully!'
-            ]);
-        } catch (Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'An error occurred: ' . $e->getMessage()
-            ], 500);
-        }
+        $task = Task::findOrFail($id);
+        $task->update([
+            'title' => $request->title,
+            'description' => $request->description,
+            'deadline' => $request->deadline,
+        ]);
+
+        return redirect()->route('task.assignment')->with('success', 'Task updated successfully.');
     }
 
-    // Anda juga bisa menambahkan metode untuk mengubah status task secara langsung
-    public function toggleStatus(Request $request, task $task)
+    // delete task
+    public function destroy($id)
     {
-        try {
-            $task->status = $request->input('status'); // Ambil status dari request
-            $task->save();
+        $task = Task::findOrFail($id);
+        $task->delete();
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Task status updated!',
-                'task' => $task
-            ]);
-        } catch (Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'An error occurred: ' . $e->getMessage()
-            ], 500);
-        }
+        return redirect()->route('task.assignment')->with('success', 'Task deleted successfully.');
     }
 
-    public function calendar()
-    {
-        $tasks = task::all();
+    public function updateStatus(Request $request, $id){
+        $request->validate([
+            'status' => 'required|in:Selesai,Belum Dikerjakan',
+        ]);
+    
+        $task = Task::findOrFail($id);
+        $task->status = $request->status; 
+        $task->save();
+    
+        return response()->json(['message' => 'Task status updated successfully']);
+    }
+
+    public function showCalendar(){
+        $tasks = Task::all(); 
         return view('task.calendar', compact('tasks'));
     }
 
-    // New method to get active tasks with deadlines as JSON
-    public function activeTasks()
-    {
-        $tasks = task::where('status', '!=', 'Selesai')
-            ->whereNotNull('deadline')
-            ->get(['id', 'title', 'deadline', 'description']);
+    public function upcomingTasks(){
+        $tasks = Task::whereDate('deadline', '>=', now()->toDateString()) 
+        ->orderBy('deadline', 'asc')   
+        ->get();
 
-        return response()->json([
-            'success' => true,
-            'tasks' => $tasks
-        ]);
+        return view('task.upcomingtask', compact('tasks'));
     }
 }
