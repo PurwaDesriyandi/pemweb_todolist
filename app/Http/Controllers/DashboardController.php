@@ -3,12 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon; // Class untuk menangani tanggal dan waktu
-
+use Illuminate\Support\Carbon;
 class DashboardController extends Controller
 {
     /**
-     * Menampilkan halaman dashboard utama beserta statistik tugas.
+     * 
      *
      * @return \Illuminate\View\View
      */

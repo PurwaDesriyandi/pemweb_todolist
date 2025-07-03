@@ -97,7 +97,6 @@
     </div>
 </div>
 
-<!-- Add Task Modal -->
 <div id="addTaskModal" class="modal">
     <div class="modal-box">
         <div class="flex justify-between items-center mb-4">
@@ -135,7 +134,6 @@
     </div>
 </div>
 
-<!-- Edit Task Modal - Diperbaiki -->
 <div id="editTaskModal" class="modal">
     <div class="modal-box relative w-11/12 max-w-3xl">
         <div class="flex justify-between items-center mb-4">
@@ -176,7 +174,6 @@
 
 @push('scripts')
 <script>
-    // Success message
     function showSuccess(message) {
         document.getElementById('success-text').textContent = message;
         document.getElementById('success-message').style.display = 'block';
@@ -184,20 +181,18 @@
             document.getElementById('success-message').style.display = 'none';
         }, 3000);
     }
-        // Function to disable body scroll
+
     function disableBodyScroll() {
         document.body.classList.add('modal-open');
     }
 
-    // Function to enable body scroll
     function enableBodyScroll() {
         document.body.classList.remove('modal-open');
     }
-    // Modal functions
     function openAddModal() {
         const modal = document.getElementById('addTaskModal');
         if (modal) {
-            disableBodyScroll(); // Disable body scroll
+            disableBodyScroll();
             modal.classList.remove('hidden');
             modal.classList.add('modal-open');
         }
@@ -214,18 +209,15 @@
         .then(data => {
             console.log('Task data received:', data);
 
-            // Populate form fields
             document.getElementById('edit-title').value = data.title || '';
             document.getElementById('edit-description').value = data.description || '';
             document.getElementById('edit-deadline').value = data.deadline || '';
 
-            // Set form action
             document.getElementById('editTaskForm').action = `/tasks/${id}`;
 
-            // Show modal
             const modal = document.getElementById('editTaskModal');
             if (modal) {
-                disableBodyScroll(); // Disable body scroll
+                disableBodyScroll();
                 modal.classList.remove('hidden');
                 modal.classList.add('modal-open');
                 console.log('Edit modal opened successfully');
@@ -239,7 +231,7 @@
     function closeModal(modalId) {
         const modal = document.getElementById(modalId);
         if (modal) {
-        enableBodyScroll(); // Enable body scroll
+        enableBodyScroll();
         modal.classList.add('hidden');
         modal.classList.remove('modal-open');
     }
@@ -260,7 +252,7 @@
         }
     }
     });
-    // Filter functionality
+
     document.querySelectorAll('[data-filter]').forEach(button => {
         button.addEventListener('click', function() {
             const filter = this.getAttribute('data-filter');
@@ -282,7 +274,7 @@
             });
         });
     });
-    // Status change for custom dropdown
+
     document.querySelectorAll('.task-item').forEach(function(taskItem) {
         const statusBtn = taskItem.querySelector('.status-btn');
         const statusLabel = taskItem.querySelector('.status-label');
@@ -338,7 +330,7 @@
             });
         });
     });
-    // Update progress bar
+    
     function updateProgress() {
         const totalTasks = document.querySelectorAll('.task-item').length;
         const completedTasks = document.querySelectorAll('.task-item.completed').length;

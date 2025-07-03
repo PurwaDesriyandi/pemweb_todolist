@@ -6,14 +6,12 @@ use App\Models\Task;
 
 class TaskController extends Controller
 {
-    // show all assignment
     public function index()
     {
         $tasks = Task::all();
         return view('task.taskList', compact('tasks'));
     }
 
-    // add new task
     public function store(Request $request)
     {
         $request->validate([
@@ -26,7 +24,7 @@ class TaskController extends Controller
             'title' => $request->title,
             'description' => $request->description,
             'deadline' => $request->deadline,
-            'status' => 'Belum Dikerjakan', //default
+            'status' => 'Belum Dikerjakan',
         ]);
 
         return redirect()->route('task.assignment')->with('success', 'Task created successfully.');
@@ -48,7 +46,6 @@ class TaskController extends Controller
     }
 }
 
-    // update task
     public function update(Request $request, $id)
     {
         $request->validate([
@@ -67,7 +64,6 @@ class TaskController extends Controller
         return redirect()->route('task.assignment')->with('success', 'Task updated successfully.');
     }
 
-    // delete task
     public function destroy($id)
     {
         $task = Task::findOrFail($id);

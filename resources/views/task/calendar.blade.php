@@ -62,7 +62,6 @@
                         </tr>
                     </thead>
                     <tbody id="calendar-body-table">
-                        <!-- Calendar rows will be rendered here -->
                     </tbody>
                 </table>
             </div>

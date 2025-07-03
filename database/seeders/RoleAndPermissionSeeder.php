@@ -13,10 +13,7 @@ class RoleAndPermissionSeeder extends Seeder
      */
     public function run(): void
     {
-        // Buat role admin dan user jika belum ada
         Role::firstOrCreate(['name' => 'admin']);
         Role::firstOrCreate(['name' => 'user']);
-        // Jika ingin permission, bisa tambahkan di sini
-        // Permission::firstOrCreate(['name' => 'manage roles']);
     }
 }
