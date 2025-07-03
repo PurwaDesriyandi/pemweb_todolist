@@ -13,10 +13,11 @@ Route::get('/register', [AuthController::class, 'showRegister'])->name('register
 Route::post('/register', [AuthController::class, 'register']);
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/', [DashboardController::class, 'index']);
+    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/task-list', [TaskController::class, 'index'])->name('task.assignment');
     Route::post('/task-list', [TaskController::class, 'store'])->name('task.store');
     Route::put('/task-assignment/{id}', [TaskController::class, 'update'])->name('task.update');
+    Route::get('/tasks/{id}', [TaskController::class, 'show'])->name('task.show');
     Route::delete('/task-list/{id}', [TaskController::class, 'destroy'])->name('task.destroy');
     Route::post('/tasks/{id}/update-status', [TaskController::class, 'updateStatus'])->name('task.updateStatus');
     Route::get('/calendar', [TaskController::class, 'showCalendar'])->name('task.calendar');

@@ -32,6 +32,22 @@ class TaskController extends Controller
         return redirect()->route('task.assignment')->with('success', 'Task created successfully.');
     }
 
+        public function show($id)
+{
+    try {
+        $task = Task::findOrFail($id);
+        return response()->json([
+            'id' => $task->id,
+            'title' => $task->title,
+            'description' => $task->description,
+            'deadline' => $task->deadline,
+            'status' => $task->status
+        ]);
+    } catch (\Exception $e) {
+        return response()->json(['error' => 'Task not found'], 404);
+    }
+}
+
     // update task
     public function update(Request $request, $id)
     {
@@ -62,7 +78,7 @@ class TaskController extends Controller
 
     public function updateStatus(Request $request, $id){
         $request->validate([
-            'status' => 'required|in:Selesai,Belum Dikerjakan',
+            'status' => 'required|in:Selesai,Belum Dikerjakan,Sedang Dikerjakan',
         ]);
 
         $task = Task::findOrFail($id);
@@ -83,7 +99,7 @@ class TaskController extends Controller
         return [
             'title' => $task->title,
             'description' => $task->description,
-            'deadline' => $task->deadline, // pastikan format YYYY-MM-DD
+            'deadline' => $task->deadline,
             'status' => $task->status,
         ];
     });

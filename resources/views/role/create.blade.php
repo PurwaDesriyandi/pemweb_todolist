@@ -13,7 +13,7 @@
                 @csrf
                 <div class="mb-3">
                     <label for="name" class="form-label">Role Name</label>
-                    <input type="text" name="name" id="name" class="form-control" required>
+                    <input type="text" name="name" id="name" class="form-control form-control-lg" style="border: 2px solid #ccc; padding: 10px; border-radius: 5px;">
                 </div>
                 <button type="submit" class="btn btn-primary">Save</button>
                 <a href="{{ route('roles.index') }}" class="btn btn-secondary">Cancel</a>

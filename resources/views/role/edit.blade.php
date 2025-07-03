@@ -14,7 +14,7 @@
                 @method('PUT')
                 <div class="mb-3">
                     <label for="name" class="form-label">Role Name</label>
-                    <input type="text" name="name" id="name" class="form-control" value="{{ $role->name }}" required>
+                    <input type="text" name="name" id="name" class="form-control form-control-lg" style="border: 2px solid #ccc; padding: 10px; border-radius: 5px;> value="{{ $role->name }} required>
                 </div>
                 <button type="submit" class="btn btn-primary">Update</button>
                 <a href="{{ route('roles.index') }}" class="btn btn-secondary">Cancel</a>
