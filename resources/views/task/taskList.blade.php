@@ -5,15 +5,14 @@
 
 @section('content')
 
-    <!-- Success Message -->
+    <div class="container">
     @if (session('success'))
-        <div class="alert alert-success">
+        <div class="alert alert-success mt-4">
             {{ session('success') }}
         </div>
     @endif
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <div class="container">
         <div class="card">
             <div class="card-header">
                 <div class="card-title">
@@ -24,7 +23,6 @@
                 <div class="filter-container">
                     <div class="filters">
                         <button class="filter-btn active" data-filter="all"> All </button>
-                        {{-- <button class="filter-btn" data-filter="running"> Running </button> --}}
                         <button class="filter-btn" id="completed-btn" data-filter="completed" > Completed </button>
                     </div>
                     <button class="btn btn-primary" onclick="openAddModal()">Add Task</button>
@@ -72,10 +70,9 @@
         </div>
     </div>
 
-    <!-- add -->
     <div id="addTaskModal" class="modal">
         <div class="modal-content">
-            <div class="modal-header">                  
+            <div class="modal-header">
                 <h3 class="modal-title">Add Task</h3>
             </div>
             <form id="addTaskForm" action="{{ route('task.store') }}" method="POST">
@@ -94,17 +91,16 @@
                         <input type="date" name="deadline" id="deadline" class="form-input" required>
                     </div>
                 </div>
-                <div class="modal-footer">   
+                <div class="modal-footer">
                     <button type="submit" class="modal-btn btn-save">Save</button>
                     <button type="button" onclick="closeModal('addTaskModal')" class="modal-btn btn-cancel">Cancel</button>
                 </div>
             </form>
         </div>
     </div>
-    <!-- edit -->
     <div id="editTaskModal" class="modal">
         <div class="modal-content">
-            <form id="editTaskForm" method="POST" action="{{ route('task.update', ['id' => $task->id]) }}">
+            <form id="editTaskForm" method="POST">
                 @csrf
                 @method('PUT')
                 <div class="modal-header">
@@ -124,7 +120,7 @@
                          <input type="date" name="deadline" id="editDeadline" class="form-input" required>
                     </div>
                 </div>
-                <div class="modal-footer">   
+                <div class="modal-footer">
                     <button type="submit" class="modal-btn btn-save" >Save</button>
                     <button type="button" class="modal-btn btn-cancel" onclick="closeModal('editTaskModal')">Cancel</button>
                 </div>
@@ -157,7 +153,6 @@
             const progressText = document.querySelector('#progress-text');
             const filterButtons = document.querySelectorAll('.filter-btn');
 
-            // Update progress bar
             const updateProgress = () => {
                 const totalTasks = document.querySelectorAll('.task-item').length;
                 const completedTasks = document.querySelectorAll('.task-item.completed').length;
@@ -167,7 +162,6 @@
                 console.log(`Progress: ${progress}%`);
             };
 
-            // Update task status backend
             const updateTaskStatus = (taskId, status) => {
                 fetch(`/tasks/${taskId}/update-status`, {
                     method: 'POST',
@@ -186,7 +180,7 @@
                 })
                 .then(data => {
                     console.log('Task status updated successfully:', data);
-                    updateProgress(); 
+                    updateProgress();
                 })
                 .catch(error => {
                     console.error('Error:', error);
@@ -194,7 +188,6 @@
                 });
             };
 
-            // Toggle task status
             taskList.addEventListener('change', (e) => {
                 if (e.target.classList.contains('task-checkbox')) {
                     const taskItem = e.target.closest('.task-item');
@@ -212,16 +205,13 @@
                 }
             });
 
-            // Filter tasks
             filterButtons.forEach(button => {
                 button.addEventListener('click', () => {
                     const filter = button.dataset.filter;
 
-                    // Update active button
                     filterButtons.forEach(btn => btn.classList.remove('active'));
                     button.classList.add('active');
 
-                    // Filter tasks
                     const tasks = document.querySelectorAll('.task-item');
                     tasks.forEach(task => {
                         if (filter === 'all') {
@@ -234,10 +224,8 @@
                     });
                 });
             });
-            // Initialize progress bar
             updateProgress();
 
-            //search functionality
             const searchInput = document.querySelector('.form-control[placeholder="Search..."]');
             const tasks = document.querySelectorAll('.task-item');
             searchInput.addEventListener('input', () => {
@@ -246,9 +234,9 @@
                 tasks.forEach(task => {
                     const title = task.querySelector('.task-title').textContent.toLowerCase();
                     if (title.includes(query)) {
-                        task.style.display = 'flex'; // Show task
+                        task.style.display = 'flex';
                     } else {
-                        task.style.display = 'none'; // Hide task
+                        task.style.display = 'none';
                     }
                 });
             });

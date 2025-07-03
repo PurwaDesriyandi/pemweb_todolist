@@ -2,11 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-// Tambahkan use statement untuk Role dan Permission di sini
-use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 
 class RoleAndPermissionSeeder extends Seeder
 {
@@ -15,9 +13,10 @@ class RoleAndPermissionSeeder extends Seeder
      */
     public function run(): void
     {
-
-        $roleAdmin = Role::create(['name' => 'admin']);
-        $roleUser = Role::create(['name' => 'user']);
-
+        // Buat role admin dan user jika belum ada
+        Role::firstOrCreate(['name' => 'admin']);
+        Role::firstOrCreate(['name' => 'user']);
+        // Jika ingin permission, bisa tambahkan di sini
+        // Permission::firstOrCreate(['name' => 'manage roles']);
     }
 }

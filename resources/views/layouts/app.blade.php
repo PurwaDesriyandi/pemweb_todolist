@@ -10,6 +10,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 
     <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet">
+    <link rel="icon" type="image/png" href="{{ asset('assets/img/favicon.png') }}">
 
     @stack('styles')
 </head>
@@ -64,14 +65,16 @@
                     <span>Calendar</span>
                 </a>
             </li>
+            @role('admin')
             <li class="nav-item">
                 <a class="nav-link {{ request()->is('role') ? 'active' : '' }}" href="/role">
                     <i class="bi bi-bar-chart-line"></i>
                     <span>Role</span>
                 </a>
             </li>
+            @endrole
             <li class="nav-item">
-    {{-- Form ini akan mengirim request POST saat link di dalamnya di-klik --}}
+
     <form method="POST" action="{{ route('logout') }}">
         @csrf
         <a class="nav-link" href="{{ route('logout') }}"

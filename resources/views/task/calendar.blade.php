@@ -152,43 +152,6 @@
                 <div class="calendar-header">Sat</div>
             </div>
             <div class="calendar-grid" id="calendar-body">
-                <div class="calendar-day"></div>
-                    <div class="calendar-day"></div>
-                    <div class="calendar-day"></div>
-                    <div class="calendar-day today">
-                        <div class="day-number">30</div>
-                    </div>
-                    <div class="calendar-day has-tasks">
-                        <div class="day-number">1</div>
-                    </div>
-                    <div class="calendar-day has-tasks">
-                        <div class="day-number">2</div>
-                    </div>
-                    <div class="calendar-day">
-                        <div class="day-number">3</div>
-                    </div>
-
-                    <div class="calendar-day">
-                        <div class="day-number">4</div>
-                    </div>
-                    <div class="calendar-day has-tasks">
-                        <div class="day-number">5</div>
-                    </div>
-                    <div class="calendar-day">
-                        <div class="day-number">6</div>
-                    </div>
-                    <div class="calendar-day has-tasks">
-                        <div class="day-number">7</div>
-                    </div>
-                    <div class="calendar-day">
-                        <div class="day-number">8</div>
-                    </div>
-                    <div class="calendar-day">
-                        <div class="day-number">9</div>
-                    </div>
-                    <div class="calendar-day">
-                        <div class="day-number">10</div>
-                    </div>
             </div>
         </div>
     </div>
@@ -207,24 +170,22 @@
         const nextButton = document.getElementById('next-month');
 
     let currentDate = new Date();
-
     let tasks = {};
 
-    // Function to fetch active tasks from API and update tasks object
     function fetchActiveTasks() {
         fetch('/api/active-tasks')
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
                     tasks = {};
-                    // Build a map of date to array of task objects
                     data.tasks.forEach(task => {
                         if (!tasks[task.deadline]) {
                             tasks[task.deadline] = [];
                         }
                         tasks[task.deadline].push({
                             title: task.title,
-                            description: task.description
+                            description: task.description,
+                            status: task.status
                         });
                     });
                     renderCalendar(currentDate);
@@ -236,14 +197,17 @@
     }
 
     function renderCalendar(date) {
+        if (!calendarBody) return;
         calendarBody.innerHTML = '';
         const year = date.getFullYear();
         const month = date.getMonth();
 
-        monthYearDisplay.textContent = date.toLocaleDateString('en-US', {
-            month: 'long',
-            year: 'numeric'
-        });
+        if (monthYearDisplay) {
+            monthYearDisplay.textContent = date.toLocaleDateString('en-US', {
+                month: 'long',
+                year: 'numeric',
+            });
+        }
 
         const firstDayOfMonth = new Date(year, month, 1);
         const daysInMonth = new Date(year, month + 1, 0).getDate();
@@ -255,117 +219,61 @@
             calendarBody.appendChild(dayElement);
         }
 
-        let currentDate = new Date();
+        for (let day = 1; day <= daysInMonth; day++) {
+            const dayElement = document.createElement('div');
+            dayElement.classList.add('calendar-day');
 
-        function renderCalendar(date) {
-            if (!calendarBody) return;
+            const dayNumber = document.createElement('div');
+            dayNumber.classList.add('day-number');
+            dayNumber.textContent = day;
+            dayElement.appendChild(dayNumber);
 
-            calendarBody.innerHTML = '';
-            const year = date.getFullYear();
-            const month = date.getMonth();
+            const dateString = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
 
-            if (monthYearDisplay) {
-                monthYearDisplay.textContent = date.toLocaleDateString('en-US', {
-                    month: 'long',
-                    year: 'numeric',
-                });
-            }
-
-            const dateString = `${year}-${String(month + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
-            if (tasks[dateString]) {
+            if (tasks[dateString] && tasks[dateString].length > 0) {
                 dayElement.classList.add('has-tasks');
-                // Clear existing text content and add day number
-                dayElement.textContent = '';
-                const dayNumber = document.createElement('div');
-                dayNumber.textContent = i;
-                dayNumber.style.fontWeight = 'bold';
-                dayElement.appendChild(dayNumber);
-
-                // Add task info elements
+                const taskList = document.createElement('div');
+                taskList.classList.add('task-list');
                 tasks[dateString].forEach(task => {
-                    const taskInfo = document.createElement('div');
-                    taskInfo.style.fontSize = '0.7rem';
-                    taskInfo.style.marginTop = '2px';
-                    taskInfo.style.textAlign = 'left';
-                    taskInfo.textContent = `${task.title}${task.description ? ': ' + task.description : ''}`;
-                    dayElement.appendChild(taskInfo);
+                    const taskItem = document.createElement('div');
+                    taskItem.classList.add('task-item');
+                    if (task.status === 'Selesai') {
+                        taskItem.classList.add('completed');
+                    }
+                    taskItem.textContent = task.title;
+                    taskItem.title = task.title + (task.description ? ': ' + task.description : '');
+                    taskList.appendChild(taskItem);
                 });
+                dayElement.appendChild(taskList);
             }
 
-            // days of current month
-            for (let day = 1; day <= daysInMonth; day++) {
-                const dayElement = document.createElement('div');
-                dayElement.classList.add('calendar-day');
-
-                const dayNumber = document.createElement('div');
-                dayNumber.classList.add('day-number');
-                dayNumber.textContent = day;
-                dayElement.appendChild(dayNumber);
-
-                const dateString = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-
-                // tasks for this date
-                if (tasks[dateString] && tasks[dateString].length > 0) {
-                    dayElement.classList.add('has-tasks');
-                    const taskList = document.createElement('div');
-                    taskList.classList.add('task-list');
-
-                    tasks[dateString].forEach(task => {
-                        const taskItem = document.createElement('div');
-                        taskItem.classList.add('task-item');
-                        if (task.status === 'Selesai') {
-                            taskItem.classList.add('completed');
-                        }
-                        taskItem.textContent = task.title;
-                        taskItem.title = task.title; // Full title on hover
-                        taskList.appendChild(taskItem);
-                    });
-                    dayElement.appendChild(taskList);
-                }
-
-                // Highlight today
-                const today = new Date();
-                if (day === today.getDate() && year === today.getFullYear() && month === today.getMonth()) {
-                    dayElement.classList.add('today');
-                }
-
-                calendarBody.appendChild(dayElement);
+            const today = new Date();
+            if (day === today.getDate() && year === today.getFullYear() && month === today.getMonth()) {
+                dayElement.classList.add('today');
             }
 
-            // Fill remaining cells for next month
-            const totalCells = calendarBody.children.length;
-            const remainingCells = 42 - totalCells;
-            for (let i = 0; i < remainingCells; i++) {
-                const emptyDay = document.createElement('div');
-                emptyDay.classList.add('calendar-day', 'next-month');
-                calendarBody.appendChild(emptyDay);
-            }
+            calendarBody.appendChild(dayElement);
         }
 
-        // Event listeners
-        if (prevButton) {
-            prevButton.addEventListener('click', () => {
-                currentDate.setMonth(currentDate.getMonth() - 1);
-                renderCalendar(currentDate);
-            });
+        const totalCells = calendarBody.children.length;
+        const remainingCells = 42 - totalCells;
+        for (let i = 0; i < remainingCells; i++) {
+            const emptyDay = document.createElement('div');
+            emptyDay.classList.add('calendar-day', 'next-month');
+            calendarBody.appendChild(emptyDay);
         }
+    }
 
-        if (nextButton) {
-            nextButton.addEventListener('click', () => {
-                currentDate.setMonth(currentDate.getMonth() + 1);
-                renderCalendar(currentDate);
-            });
-        }
-
-        // Initial render
+    prevButton?.addEventListener('click', () => {
+        currentDate.setMonth(currentDate.getMonth() - 1);
         renderCalendar(currentDate);
     });
-
-    nextButton.addEventListener('click', () => {
+    nextButton?.addEventListener('click', () => {
         currentDate.setMonth(currentDate.getMonth() + 1);
         renderCalendar(currentDate);
     });
 
+    renderCalendar(currentDate);
     fetchActiveTasks();
 });
 </script>

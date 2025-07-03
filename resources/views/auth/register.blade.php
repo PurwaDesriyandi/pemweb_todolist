@@ -48,14 +48,13 @@
                     <h5 class="card-title text-center pb-0 fs-4">Create an Account</h5>
                     <p class="text-center small">Enter your personal details to create account</p>
                   </div>
-
-                  <div class="col-12">
-                    <label for="yourUsername" class="form-label">Username</label>
-                    <div class="input-group has-validation">
+                  <form method="POST" action="/register" class="row g-3 needs-validation" novalidate>
+                    @csrf
+                    <div class="col-12">
+                      <label for="yourUsername" class="form-label">Username</label>
                       <input type="text" name="username" class="form-control" id="yourUsername" required>
                       <div class="invalid-feedback">Please choose a username.</div>
                     </div>
-                  </div>
 
                     <div class="col-12">
                       <label for="yourEmail" class="form-label">Your Email</label>
@@ -72,7 +71,7 @@
 
                     <div class="col-12">
                       <div class="form-check">
-                        <input class="form-check-input" name="terms" type="checkbox" value="" id="acceptTerms" required>
+                        <input class="form-check-input" name="terms" type="checkbox" value="1" id="acceptTerms" required>
                         <label class="form-check-label" for="acceptTerms">I agree and accept the <a href="#">terms and conditions</a></label>
                         <div class="invalid-feedback">You must agree before submitting.</div>
                       </div>

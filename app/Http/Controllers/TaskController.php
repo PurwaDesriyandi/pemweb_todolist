@@ -77,4 +77,20 @@ class TaskController extends Controller
         return view('task.calendar', compact('tasks'));
     }
 
+    public function activeTasks()
+    {
+    $tasks = Task::all()->map(function($task) {
+        return [
+            'title' => $task->title,
+            'description' => $task->description,
+            'deadline' => $task->deadline, // pastikan format YYYY-MM-DD
+            'status' => $task->status,
+        ];
+    });
+    return response()->json([
+        'success' => true,
+        'tasks' => $tasks
+    ]);
+    }
+
 }
